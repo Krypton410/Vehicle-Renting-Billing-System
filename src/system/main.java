@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
 
@@ -34,8 +35,8 @@ public class main extends javax.swing.JFrame {
     PreparedStatement prepared;
     public main() throws SQLException{
         initComponents();
-        setTitle("Renting and Billing System");
-        setSize(1239, 700);
+        setTitle("Vehicle Renting and Billing System");
+        setSize(1253, 768);
         setResizable(false);
         conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
        
@@ -78,7 +79,7 @@ public class main extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        receipt = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         theID = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
@@ -129,6 +130,11 @@ public class main extends javax.swing.JFrame {
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
 
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         theVehicle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MITSUBISHI", "TOYOTA", "FORD", "BUGATTI", "LAMBORGHINI", "PORSHE" }));
@@ -148,6 +154,11 @@ public class main extends javax.swing.JFrame {
         });
 
         jButton2.setText(" Clear");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Reset");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -156,10 +167,11 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        receipt.setEditable(false);
+        receipt.setColumns(20);
+        receipt.setFont(new java.awt.Font("MS Reference Sans Serif", 0, 13)); // NOI18N
+        receipt.setRows(5);
+        jScrollPane2.setViewportView(receipt);
 
         jLabel6.setText("ID");
 
@@ -182,7 +194,7 @@ public class main extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 845, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 859, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -259,10 +271,10 @@ public class main extends javax.swing.JFrame {
                             .addComponent(jButton2)
                             .addComponent(jButton3)
                             .addComponent(jButton4))
-                        .addGap(27, 27, 27)
+                        .addGap(75, 75, 75)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 241, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -277,6 +289,8 @@ public class main extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {           
+            rentDuration.setFocusable(false);
+                
             String name = theName.getText();
             String address = theAddress.getText();
             int phone = Integer.valueOf(thePhoneNumber.getText());
@@ -306,6 +320,9 @@ public class main extends javax.swing.JFrame {
             prepared.executeUpdate();
             statement.close();
             conn.close();
+            
+            receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"  
+                    + "Rent Duration: \t " +String.valueOf(rent) + " days");
             
         } catch (SQLException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
@@ -347,8 +364,54 @@ public class main extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        theID.setText("");
+        theName.setText("");
+        theAddress.setText("");
+        thePhoneNumber.setText("");
+        rentDuration.setValue(0);
+         theVehicle.setSelectedIndex(0);
         
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        int selectedRow = jTable1.getSelectedRow();
+//        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        theID.setText(jTable1.getModel().getValueAt(selectedRow, 0).toString());
+        theName.setText(jTable1.getModel().getValueAt(selectedRow, 1).toString());
+        theAddress.setText(jTable1.getModel().getValueAt(selectedRow, 2).toString());
+        thePhoneNumber.setText(jTable1.getModel().getValueAt(selectedRow, 3).toString());
+        rentDuration.setValue(jTable1.getModel().getValueAt(selectedRow, 4));
+        
+        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("MITSUBISHI")){
+        theVehicle.setSelectedIndex(0);}
+        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("TOYOTA")){
+        theVehicle.setSelectedIndex(1);}
+        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("FORD")){
+        theVehicle.setSelectedIndex(2);}
+        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("BUGATTI")){
+        theVehicle.setSelectedIndex(3);}
+        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("LAMBORGHINI")){
+        theVehicle.setSelectedIndex(4);}
+        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("PORSHE")){
+        theVehicle.setSelectedIndex(5);}
+       
+        
+        
+        receipt.setText("ID Number : \t\t" + jTable1.getModel().getValueAt(selectedRow, 0).toString() + "\n" + "Name: \t\t" + jTable1.getModel().getValueAt(selectedRow, 1).toString() 
+                + "\nAddress: \t\t" + jTable1.getModel().getValueAt(selectedRow, 2).toString()
+                + "\nPhone Number: \t " + jTable1.getModel().getValueAt(selectedRow, 3).toString()+ "\n"  
+        + "Rent Duration: \t " +jTable1.getModel().getValueAt(selectedRow, 4).toString() + " days");
+        
+        
+        
+        
+    }//GEN-LAST:event_jTable1MouseClicked
 
     
     private void update_Table(){
@@ -443,7 +506,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea receipt;
     private javax.swing.JSpinner rentDuration;
     private javax.swing.JTextField theAddress;
     private javax.swing.JTextField theID;

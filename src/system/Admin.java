@@ -15,7 +15,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -38,6 +40,8 @@ public class Admin extends javax.swing.JFrame {
         setResizable(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        JFormattedTextField editor = ((JSpinner.DefaultEditor)rentDuration.getEditor()).getTextField();
+        editor.setEditable(false);
         conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
         statement = conn.createStatement();
         rs = statement.executeQuery("Select * from USERNAME.DB ORDER BY ID ASC");
@@ -61,6 +65,12 @@ public class Admin extends javax.swing.JFrame {
         IT301_System_PUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("IT301_System_PU").createEntityManager();
         dbQuery = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
         dbList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery.getResultList();
+        dbQuery1 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery1.getResultList();
+        dbQuery2 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList2 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery2.getResultList();
+        dbQuery3 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList3 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery3.getResultList();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         theVehicle = new javax.swing.JComboBox<>();
@@ -82,10 +92,13 @@ public class Admin extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         search = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
+        status = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        filter = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList, jTable1);
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList3, jTable1);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
         columnBinding.setColumnName("Id");
         columnBinding.setColumnClass(Long.class);
@@ -103,6 +116,9 @@ public class Admin extends javax.swing.JFrame {
         columnBinding.setColumnClass(Integer.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${vehicle}"));
         columnBinding.setColumnName("Vehicle");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${status}"));
+        columnBinding.setColumnName("Status");
         columnBinding.setColumnClass(String.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
@@ -182,7 +198,13 @@ public class Admin extends javax.swing.JFrame {
         });
 
         jLabel7.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
-        jLabel7.setText("Search ");
+        jLabel7.setText("Search by :");
+
+        search.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchKeyTyped(evt);
+            }
+        });
 
         jButton5.setBackground(new java.awt.Color(255, 255, 255));
         jButton5.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
@@ -190,6 +212,23 @@ public class Admin extends javax.swing.JFrame {
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
+            }
+        });
+
+        status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ON USE", "SCHEDULED", "ONHOLD", "NOT RETURNED", "RETURNED" }));
+        status.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statusActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("Select Vehicle");
+
+        filter.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
+        filter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NAME", "ADDRESS", "PHONE", "VEHICLE", "STATUS" }));
+        filter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterActionPerformed(evt);
             }
         });
 
@@ -202,16 +241,8 @@ public class Admin extends javax.swing.JFrame {
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(79, 79, 79))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(rentDuration)
-                            .addComponent(thePhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -228,37 +259,54 @@ public class Admin extends javax.swing.JFrame {
                             .addComponent(theName, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(theAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(theVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(44, 44, 44)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(rentDuration)
+                                    .addComponent(thePhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(theVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(filter, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton5)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 842, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 849, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(filter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -285,12 +333,16 @@ public class Admin extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(theVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
-                        .addGap(45, 45, 45)
+                        .addGap(14, 14, 14)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
                             .addComponent(jButton2)
                             .addComponent(jButton3))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 285, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 288, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addGap(25, 25, 25))
         );
@@ -324,6 +376,18 @@ public class Admin extends javax.swing.JFrame {
             theVehicle.setSelectedIndex(4);}
         if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("PORSHE")){
             theVehicle.setSelectedIndex(5);}
+        
+        
+         if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("ON USE")){
+             status.setSelectedIndex(0);}
+        if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("SCHEDULED")){
+            status.setSelectedIndex(1);}
+        if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("ONHOLD")){
+            status.setSelectedIndex(2);}
+        if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("NOT RETURNED")){
+            status.setSelectedIndex(3);}
+        if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("RETURNED")){
+            status.setSelectedIndex(4);}
 
 //        receipt.setText("ID Number : \t\t" + jTable1.getModel().getValueAt(selectedRow, 0).toString() + "\n" + "Name: \t\t" + jTable1.getModel().getValueAt(selectedRow, 1).toString()
 //            + "\nAddress: \t\t" + jTable1.getModel().getValueAt(selectedRow, 2).toString()
@@ -375,6 +439,7 @@ public class Admin extends javax.swing.JFrame {
             String phone = (thePhoneNumber.getText());
             int rent = (int)rentDuration.getValue();
             String vehicle = theVehicle.getSelectedItem().toString();
+            String currentStatus = status.getSelectedItem().toString();
             String id = theID.getText();
             
             if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
@@ -388,14 +453,15 @@ public class Admin extends javax.swing.JFrame {
             // TODO add your handling code here:
 
         
-            prepared = (PreparedStatement) conn.prepareStatement("UPDATE USERNAME.DB SET ID = ?, NAME = ?, PHONE = ?, RENT = ?, VEHICLE = ?, ADDRESS = ? WHERE ID = ?");
+            prepared = (PreparedStatement) conn.prepareStatement("UPDATE USERNAME.DB SET ID = ?, NAME = ?, PHONE = ?, RENT = ?, VEHICLE = ?, ADDRESS = ?, STATUS = ? WHERE ID = ?");
             prepared.setInt(1, Integer.valueOf(id));
             prepared.setString(2, name);
-            prepared.setInt(3, Integer.valueOf(phone));
+            prepared.setLong(3, Long.parseLong(phone));
             prepared.setInt(4, rent);
             prepared.setString(5, vehicle);
             prepared.setString(6, address);
-            prepared.setString(7, jTable1.getModel().getValueAt(selectedRow, 0).toString());
+            prepared.setString(7, currentStatus);
+            prepared.setString(8, jTable1.getModel().getValueAt(selectedRow, 0).toString());
             JOptionPane.showMessageDialog(null, "PROFILE SUCCESSFULLY CHANGED");
             prepared.executeUpdate();
             statement.close();
@@ -492,6 +558,34 @@ public class Admin extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_statusActionPerformed
+
+    private void filterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_filterActionPerformed
+
+    private void searchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchKeyTyped
+        // TODO add your handling code here:
+       
+        
+    if(filter.getSelectedIndex() == 2 ){
+        
+                char c = evt.getKeyChar();
+        if(!(Character.isDigit(c) || (c==KeyEvent.VK_BACK_SPACE) || (c==KeyEvent.VK_DELETE))){
+            evt.consume();
+
+        }
+        
+   }
+    }//GEN-LAST:event_searchKeyTyped
+
+    
+    
+    
+    
+    
     
      private void update_Table(){
     try{
@@ -523,11 +617,40 @@ public class Admin extends javax.swing.JFrame {
     }
      
      
-    private void search_Table(){
      
+    private void search_Table(){
+     int theFilter = filter.getSelectedIndex();
+     String sql = null;
     try{
+        
 
-    String sql = "SELECT * FROM USERNAME.DB WHERE UPPER(NAME) LIKE UPPER('%"+ search.getText()+ "%')";
+        
+    if(theFilter == 0){
+     sql = "SELECT * FROM USERNAME.DB WHERE "
+            + "UPPER(NAME) LIKE UPPER('%"+ search.getText()+ "%')";}
+    
+    else if(theFilter == 1){
+     sql = "SELECT * FROM USERNAME.DB WHERE "
+            + "UPPER(ADDRESS) LIKE UPPER('%"+ search.getText()+ "%')";} 
+    
+    else if(theFilter == 2){
+     sql = "SELECT * FROM USERNAME.DB WHERE "
+            + "PHONE LIKE '%"+ search.getText()+ "%'";} 
+    
+
+   
+   
+   else if(theFilter == 3){
+     sql = "SELECT * FROM USERNAME.DB WHERE "
+            + "UPPER(VEHICLE) LIKE UPPER('%"+ search.getText()+ "%')";} 
+    
+   else if(theFilter == 4){
+     sql = "SELECT * FROM USERNAME.DB WHERE "
+            + "UPPER(STATUS) LIKE UPPER('%"+ search.getText()+ "%')";} 
+    
+   
+    
+                
 //    ID LIKE '%"+ search.getText()+ "%'  OR PHONE LIKE '%"+ search.getText()+ "%' OR RENT LIKE '%"+ search.getText()+ "%' OR VEHICLE LIKE '%"+ search.getText()+ "%' OR ADDRESSLIKE '%"+ search.getText()+ "%'
     conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
     prepared = conn.prepareStatement(sql);
@@ -599,7 +722,14 @@ public class Admin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager IT301_System_PUEntityManager;
     private java.util.List<system.Db> dbList;
+    private java.util.List<system.Db> dbList1;
+    private java.util.List<system.Db> dbList2;
+    private java.util.List<system.Db> dbList3;
     private javax.persistence.Query dbQuery;
+    private javax.persistence.Query dbQuery1;
+    private javax.persistence.Query dbQuery2;
+    private javax.persistence.Query dbQuery3;
+    private javax.swing.JComboBox<String> filter;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -612,10 +742,12 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JSpinner rentDuration;
     private javax.swing.JTextField search;
+    private javax.swing.JComboBox<String> status;
     private javax.swing.JTextField theAddress;
     private javax.swing.JTextField theID;
     private javax.swing.JTextField theName;

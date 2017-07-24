@@ -35,6 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Db.findByAddress", query = "SELECT d FROM Db d WHERE d.address = :address")})
 public class Db implements Serializable {
 
+    @Column(name = "STATUS")
+    private String status;
+
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
@@ -152,6 +155,16 @@ public class Db implements Serializable {
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        String oldStatus = this.status;
+        this.status = status;
+        changeSupport.firePropertyChange("status", oldStatus, status);
     }
     
 }

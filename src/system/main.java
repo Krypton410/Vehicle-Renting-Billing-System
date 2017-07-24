@@ -21,7 +21,9 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -48,9 +50,13 @@ public class main extends javax.swing.JFrame {
         setResizable(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        
+        JFormattedTextField editor = ((JSpinner.DefaultEditor)rentDuration.getEditor()).getTextField();
+        editor.setEditable(false);
+        
         conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
        
-        JOptionPane.showMessageDialog(null, "Connection Created");
+       
         statement = conn.createStatement();
         rs = statement.executeQuery("SELECT ID FROM USERNAME.DB ORDER BY ID DESC");
         jTable1.setModel(DbUtils.resultSetToTableModel(rs));
@@ -346,7 +352,7 @@ public class main extends javax.swing.JFrame {
             prepared = (PreparedStatement) conn.prepareStatement("INSERT INTO USERNAME.DB (ID, NAME, PHONE, RENT, VEHICLE, ADDRESS) VALUES (?,?,?,?,?,?)");
             prepared.setInt(1, Integer.valueOf(id));
             prepared.setString(2, name);
-            prepared.setInt(3, Integer.valueOf(phone));
+            prepared.setLong(3, Long.parseLong(phone));
             prepared.setInt(4, rent);
             prepared.setString(5, vehicle);
             prepared.setString(6, address);
@@ -406,7 +412,7 @@ public class main extends javax.swing.JFrame {
         theName.setText("");
         theAddress.setText("");
         thePhoneNumber.setText("");
-        rentDuration.setValue(0);
+        rentDuration.setValue(1);
          theVehicle.setSelectedIndex(0);
         receipt.setText("");
     }//GEN-LAST:event_jButton3ActionPerformed

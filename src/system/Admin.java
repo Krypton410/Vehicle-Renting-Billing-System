@@ -79,6 +79,9 @@ public class Admin extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        search = new javax.swing.JTextField();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -178,12 +181,28 @@ public class Admin extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
+        jLabel7.setText("Search ");
+
+        jButton5.setBackground(new java.awt.Color(255, 255, 255));
+        jButton5.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
+        jButton5.setText("Search");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap(1047, Short.MAX_VALUE)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(79, 79, 79))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -220,17 +239,26 @@ public class Admin extends javax.swing.JFrame {
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(theVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(44, 44, 44)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 833, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton5)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 842, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(79, 79, 79))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -262,7 +290,7 @@ public class Admin extends javax.swing.JFrame {
                             .addComponent(jButton1)
                             .addComponent(jButton2)
                             .addComponent(jButton3))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 285, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addGap(25, 25, 25))
         );
@@ -278,21 +306,23 @@ public class Admin extends javax.swing.JFrame {
         //        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         theID.setText(jTable1.getModel().getValueAt(selectedRow, 0).toString());
         theName.setText(jTable1.getModel().getValueAt(selectedRow, 1).toString());
-        theAddress.setText(jTable1.getModel().getValueAt(selectedRow, 2).toString());
-        thePhoneNumber.setText(jTable1.getModel().getValueAt(selectedRow, 3).toString());
-        rentDuration.setValue(jTable1.getModel().getValueAt(selectedRow, 4));
-
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("MITSUBISHI")){
+        thePhoneNumber.setText(jTable1.getModel().getValueAt(selectedRow, 2).toString());
+        rentDuration.setValue(jTable1.getModel().getValueAt(selectedRow, 3));
+        theAddress.setText(jTable1.getModel().getValueAt(selectedRow, 5).toString());
+        
+        
+//        Integer.valueOf(jTable1.getModel().getValueAt(selectedRow, 4).toString())
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("MITSUBISHI")){
             theVehicle.setSelectedIndex(0);}
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("TOYOTA")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA")){
             theVehicle.setSelectedIndex(1);}
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("FORD")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("FORD")){
             theVehicle.setSelectedIndex(2);}
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("BUGATTI")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("BUGATTI")){
             theVehicle.setSelectedIndex(3);}
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("LAMBORGHINI")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("LAMBORGHINI")){
             theVehicle.setSelectedIndex(4);}
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("PORSHE")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("PORSHE")){
             theVehicle.setSelectedIndex(5);}
 
 //        receipt.setText("ID Number : \t\t" + jTable1.getModel().getValueAt(selectedRow, 0).toString() + "\n" + "Name: \t\t" + jTable1.getModel().getValueAt(selectedRow, 1).toString()
@@ -409,6 +439,7 @@ public class Admin extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        update_Table();
         theID.setText("");
         theName.setText("");
         theAddress.setText("");
@@ -428,12 +459,43 @@ public class Admin extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+//        
+//        String s = search.getText();
+//        if(search.getText().equals("")){
+//        JOptionPane.showMessageDialog(null, "No Input");
+//        }
+//        else{
+//            try {
+//                prepared = (PreparedStatement) conn.prepareStatement("SELECT * FROM USERNAME.DB WHERE NAME LIKE '%?%'");
+//                prepared.setString(0, s);
+//              prepared.setString(1, s);
+//                prepared.setString(2, s);
+//                prepared.executeUpdate();
+//                statement.close();
+//                conn.close();
+//                update_Table();
+//              
+//            } catch (SQLException ex) {
+//                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+//                JOptionPane.showMessageDialog(null, "No Information Found");
+//            }
+//
+//        }
+//        
+//        
+        search_Table();
+        
+        
+        
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     
      private void update_Table(){
     try{
-        
-        
-    
+
     String sql = "Select * from USERNAME.DB ORDER BY ID ASC";
     conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
     prepared = conn.prepareStatement(sql);
@@ -459,6 +521,42 @@ public class Admin extends javax.swing.JFrame {
     try{prepared.close();}
     catch(Exception e){}
     }
+     
+     
+    private void search_Table(){
+     
+    try{
+
+    String sql = "SELECT * FROM USERNAME.DB WHERE UPPER(NAME) LIKE UPPER('%"+ search.getText()+ "%')";
+//    ID LIKE '%"+ search.getText()+ "%'  OR PHONE LIKE '%"+ search.getText()+ "%' OR RENT LIKE '%"+ search.getText()+ "%' OR VEHICLE LIKE '%"+ search.getText()+ "%' OR ADDRESSLIKE '%"+ search.getText()+ "%'
+    conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
+    prepared = conn.prepareStatement(sql);
+    rs = prepared.executeQuery();
+    jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+    
+    }
+    catch(Exception e){
+    JOptionPane.showMessageDialog(null, e);
+    
+    }
+    finally{
+    try{
+    
+    rs.close();
+    prepared.close();
+    
+    }
+    catch (Exception e){}
+    }
+    
+    
+    try{prepared.close();}
+    catch(Exception e){}
+    }
+     
+     
+     
+  
     /**
      * @param args the command line arguments
      */
@@ -506,15 +604,18 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JSpinner rentDuration;
+    private javax.swing.JTextField search;
     private javax.swing.JTextField theAddress;
     private javax.swing.JTextField theID;
     private javax.swing.JTextField theName;

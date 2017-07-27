@@ -148,18 +148,22 @@ public class main extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         dateChooserCombo1 = new datechooser.beans.DateChooserCombo();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
+        jLabel1.setForeground(new java.awt.Color(240, 240, 240));
         jLabel1.setText("Name");
         getContentPane().add(jLabel1);
         jLabel1.setBounds(730, 60, 39, 14);
 
+        jLabel2.setForeground(new java.awt.Color(240, 240, 240));
         jLabel2.setText("Address");
         getContentPane().add(jLabel2);
         jLabel2.setBounds(730, 100, 51, 14);
 
+        jLabel3.setForeground(new java.awt.Color(240, 240, 240));
         jLabel3.setText("Phone Number");
         getContentPane().add(jLabel3);
         jLabel3.setBounds(730, 120, 90, 25);
@@ -186,6 +190,7 @@ public class main extends javax.swing.JFrame {
         getContentPane().add(rentDuration);
         rentDuration.setBounds(820, 150, 356, 29);
 
+        jLabel4.setForeground(new java.awt.Color(240, 240, 240));
         jLabel4.setText("Rent Duration");
         getContentPane().add(jLabel4);
         jLabel4.setBounds(730, 160, 82, 14);
@@ -199,6 +204,7 @@ public class main extends javax.swing.JFrame {
         getContentPane().add(theVehicle);
         theVehicle.setBounds(820, 190, 356, 28);
 
+        jLabel5.setForeground(new java.awt.Color(240, 240, 240));
         jLabel5.setText("Pick-Up Date");
         getContentPane().add(jLabel5);
         jLabel5.setBounds(730, 230, 83, 30);
@@ -289,6 +295,7 @@ public class main extends javax.swing.JFrame {
         getContentPane().add(jButton6);
         jButton6.setBounds(1070, 280, 103, 23);
 
+        jLabel6.setForeground(new java.awt.Color(240, 240, 240));
         jLabel6.setText("Select Vehicle");
         getContentPane().add(jLabel6);
         jLabel6.setBounds(730, 200, 83, 14);
@@ -299,7 +306,11 @@ public class main extends javax.swing.JFrame {
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/system/ezgif.com-gif-maker (1).gif"))); // NOI18N
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(20, 20, 690, 330);
+        jLabel7.setBounds(30, 30, 690, 330);
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/system/LogoWhite.png"))); // NOI18N
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(-40, 350, 750, 220);
 
         bindingGroup.bind();
 
@@ -645,6 +656,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;

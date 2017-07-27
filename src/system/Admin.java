@@ -5,6 +5,7 @@
  */
 package system;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -43,6 +44,7 @@ public class Admin extends javax.swing.JFrame {
         setResizable(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        getContentPane().setBackground(Color.decode("#22ad80"));
         JFormattedTextField editor = ((JSpinner.DefaultEditor)rentDuration.getEditor()).getTextField();
         editor.setEditable(false);
         conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
@@ -112,6 +114,7 @@ public class Admin extends javax.swing.JFrame {
         rentDuration = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
         theID = new javax.swing.JTextField();
+        jButton10 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
@@ -123,9 +126,12 @@ public class Admin extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jButton9 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        filter1 = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
         thePassword = new javax.swing.JTextField();
         theUsername = new javax.swing.JTextField();
         id = new javax.swing.JTextField();
+        search1 = new javax.swing.JTextField();
         search = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
         status = new javax.swing.JComboBox<>();
@@ -274,6 +280,17 @@ public class Admin extends javax.swing.JFrame {
         getContentPane().add(theID);
         theID.setBounds(110, 47, 259, 25);
 
+        jButton10.setBackground(new java.awt.Color(255, 255, 255));
+        jButton10.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
+        jButton10.setText("Search");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton10);
+        jButton10.setBounds(920, 448, 63, 20);
+
         jButton7.setText("Delete");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,6 +375,21 @@ public class Admin extends javax.swing.JFrame {
         });
         getContentPane().add(jButton8);
         jButton8.setBounds(240, 670, 110, 23);
+
+        filter1.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
+        filter1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Username", "Position" }));
+        filter1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filter1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(filter1);
+        filter1.setBounds(450, 450, 67, 16);
+
+        jLabel15.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
+        jLabel15.setText("Search by :");
+        getContentPane().add(jLabel15);
+        jLabel15.setBounds(390, 450, 51, 13);
         getContentPane().add(thePassword);
         thePassword.setBounds(110, 560, 240, 30);
         getContentPane().add(theUsername);
@@ -366,6 +398,19 @@ public class Admin extends javax.swing.JFrame {
         id.setEnabled(false);
         getContentPane().add(id);
         id.setBounds(110, 480, 240, 30);
+
+        search1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                search1ActionPerformed(evt);
+            }
+        });
+        search1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                search1KeyTyped(evt);
+            }
+        });
+        getContentPane().add(search1);
+        search1.setBounds(530, 448, 382, 20);
 
         search.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -812,6 +857,23 @@ public class Admin extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton9ActionPerformed
 
+    private void filter1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filter1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_filter1ActionPerformed
+
+    private void search1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search1KeyTyped
+
+    private void search1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search1ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        // TODO add your handling code here:
+        search_Table_Management();
+    }//GEN-LAST:event_jButton10ActionPerformed
+
     
     
     
@@ -938,6 +1000,64 @@ public class Admin extends javax.swing.JFrame {
     try{prepared.close();}
     catch(Exception e){}
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      private void search_Table_Management(){
+     int theFilter = filter1.getSelectedIndex();
+     String sql = null;
+    try{
+        
+
+        
+    if(theFilter == 0){
+     sql = "SELECT * FROM USERNAME.MANAGEMENT WHERE "
+            + "UPPER(USERNAME) LIKE UPPER('%"+ search1.getText()+ "%')";}
+    
+ 
+    
+    else if(theFilter == 1){
+        sql = "SELECT * FROM USERNAME.MANAGEMENT WHERE "
+            + "UPPER(POSITION) LIKE UPPER('%"+ search1.getText()+ "%')";} 
+    
+
+
+   
+    
+                
+//    ID LIKE '%"+ search.getText()+ "%'  OR PHONE LIKE '%"+ search.getText()+ "%' OR RENT LIKE '%"+ search.getText()+ "%' OR VEHICLE LIKE '%"+ search.getText()+ "%' OR ADDRESSLIKE '%"+ search.getText()+ "%'
+    conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
+    prepared = conn.prepareStatement(sql);
+    rs = prepared.executeQuery();
+    jTable2.setModel(DbUtils.resultSetToTableModel(rs));
+    
+    }
+    catch(Exception e){
+    JOptionPane.showMessageDialog(null, e);
+    
+    }
+    finally{
+    try{
+    
+    rs.close();
+    prepared.close();
+    
+    }
+    catch (Exception e){}
+    }
+    
+    
+    try{prepared.close();}
+    catch(Exception e){}
+    }
+    
+    
      
      
      
@@ -1007,8 +1127,10 @@ public class Admin extends javax.swing.JFrame {
     private javax.persistence.Query dbQuery8;
     private javax.persistence.Query dbQuery9;
     private javax.swing.JComboBox<String> filter;
+    private javax.swing.JComboBox<String> filter1;
     private javax.swing.JTextField id;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -1023,6 +1145,7 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1041,6 +1164,7 @@ public class Admin extends javax.swing.JFrame {
     private javax.persistence.Query managementQuery1;
     private javax.swing.JSpinner rentDuration;
     private javax.swing.JTextField search;
+    private javax.swing.JTextField search1;
     private javax.swing.JComboBox<String> status;
     private javax.swing.JTextField theAddress;
     private javax.swing.JTextField theID;

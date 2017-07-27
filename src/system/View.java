@@ -5,7 +5,9 @@
  */
 package system;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import static java.awt.PageAttributes.ColorType.COLOR;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -34,12 +36,22 @@ public class View extends javax.swing.JFrame {
         PreparedStatement prepared, pt;
         int selectedRow;
     public View() {
-        initComponents();
-        setTitle("View");
-        setSize(906, 477);
-        setResizable(false);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+              try {
+                  initComponents();
+                  setTitle("View");
+                  setSize(906, 477);
+                  setResizable(false);
+                  Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                  this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+                  getContentPane().setBackground(Color.decode("#1f6850"));
+                  String sql = "Select * from USERNAME.DB ORDER BY ID ASC";
+                  conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
+                  prepared = conn.prepareStatement(sql);
+                  rs = prepared.executeQuery();
+                  jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+              } catch (SQLException ex) {
+                  Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+              }
     
     }
 

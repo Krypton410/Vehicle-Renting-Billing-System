@@ -113,7 +113,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="730" y="60" width="39" height="-1"/>
+          <AbsoluteConstraints x="730" y="64" width="39" height="20"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -144,6 +144,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JTextField" name="theName">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="theNameKeyTyped"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="820" y="60" width="356" height="25"/>
@@ -151,6 +154,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JTextField" name="theAddress">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="theAddressKeyTyped"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="820" y="90" width="356" height="25"/>
@@ -214,6 +220,8 @@
         </Property>
       </Properties>
       <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="theVehicleItemStateChanged"/>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="theVehicleMouseClicked"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="theVehicleActionPerformed"/>
       </Events>
       <AuxValues>
@@ -401,6 +409,10 @@
           <Dimension value="[350, 300]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="onSelectionChange" listener="datechooser.events.SelectionChangedListener" parameters="datechooser.events.SelectionChangedEvent" handler="dateChooserCombo1OnSelectionChange"/>
+        <EventHandler event="onCommit" listener="datechooser.events.CommitListener" parameters="datechooser.events.CommitEvent" handler="dateChooserCombo1OnCommit"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="820" y="230" width="355" height="30"/>

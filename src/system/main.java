@@ -82,6 +82,12 @@ public class main extends javax.swing.JFrame {
        
         while(rs.next());
         
+        if(theName.getText().equals("") || theAddress.getText().equals("") || !(thePhoneNumber.getText().length() >= 11) ){
+        theVehicle.setEnabled(false);
+       
+        }
+        else
+        theVehicle.setEnabled(true);
         
        
         
@@ -156,7 +162,7 @@ public class main extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(240, 240, 240));
         jLabel1.setText("Name");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(730, 60, 39, 14);
+        jLabel1.setBounds(730, 64, 39, 20);
 
         jLabel2.setForeground(new java.awt.Color(240, 240, 240));
         jLabel2.setText("Address");
@@ -167,8 +173,20 @@ public class main extends javax.swing.JFrame {
         jLabel3.setText("Phone Number");
         getContentPane().add(jLabel3);
         jLabel3.setBounds(730, 120, 90, 25);
+
+        theName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                theNameKeyTyped(evt);
+            }
+        });
         getContentPane().add(theName);
         theName.setBounds(820, 60, 356, 25);
+
+        theAddress.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                theAddressKeyTyped(evt);
+            }
+        });
         getContentPane().add(theAddress);
         theAddress.setBounds(820, 90, 356, 25);
 
@@ -196,6 +214,16 @@ public class main extends javax.swing.JFrame {
         jLabel4.setBounds(730, 160, 82, 14);
 
         theVehicle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MITSUBISHI ADVENTURE 2.5 GLX", "MITSUBISHI MIRAGE GLX 1.6", "TOYOTA INNOVA 2.5 E", "TOYOTA HI-ACE COMMUTER 2.8", "TOYOTA HI-ACE GRANDIA 3.0", "TOYOTA HI-ACE SUPER GRANDIA 3.0", "TOYOTA VIOS 1.3 E", "TOYOTA AVANZA 1.5 J", "HYUNDAI ACCENT 1.6", "HYUNDAI STAREX 2.4" }));
+        theVehicle.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                theVehicleItemStateChanged(evt);
+            }
+        });
+        theVehicle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                theVehicleMouseClicked(evt);
+            }
+        });
         theVehicle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 theVehicleActionPerformed(evt);
@@ -301,6 +329,16 @@ public class main extends javax.swing.JFrame {
         jLabel6.setBounds(730, 200, 83, 14);
 
         dateChooserCombo1.setCalendarPreferredSize(new java.awt.Dimension(350, 300));
+        dateChooserCombo1.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
+            public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
+                dateChooserCombo1OnSelectionChange(evt);
+            }
+        });
+        dateChooserCombo1.addCommitListener(new datechooser.events.CommitListener() {
+            public void onCommit(datechooser.events.CommitEvent evt) {
+                dateChooserCombo1OnCommit(evt);
+            }
+        });
         getContentPane().add(dateChooserCombo1);
         dateChooserCombo1.setBounds(820, 230, 355, 30);
 
@@ -331,7 +369,7 @@ public class main extends javax.swing.JFrame {
                 String address = theAddress.getText();
                 String phone = (thePhoneNumber.getText());
                 int rent = (int)rentDuration.getValue();
-                int val = 0;
+                int val = 0,valCheck = 0;
                 String vehicle = theVehicle.getSelectedItem().toString();
                 String id = theID.getText();
                 String date = dateChooserCombo1.getText();
@@ -340,6 +378,10 @@ public class main extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Please fill all necessary informations");
                     
                 }
+                else if(thePhoneNumber.getText().length() != 11){
+                    
+                JOptionPane.showMessageDialog(null, "Check Phone Number");
+                }
                 
                 
                 else
@@ -347,40 +389,22 @@ public class main extends javax.swing.JFrame {
                     
                     
                     prepared = (PreparedStatement) conn.prepareStatement("INSERT INTO USERNAME.DB (ID, NAME, PHONE, RENT, VEHICLE, ADDRESS, STATUS, DATE, BILL) VALUES (?,?,?,?,?,?,?,?,?)");
-                
-                       
-//       try{
-//       ts = statement1.executeQuery("SELECT MAX(ID) FROM USERNAME.DB");
-//       while(ts.next()){
-//       ts.last();
-//       val = ((ts.getInt("ID")));
-//       
-//       }
-//           
-//           
-//       }
-//       
-//       
-//       catch(Exception e){
-//       
-//       
-//       
-//       }
-//       
-        ResultSet rset;
-        java.sql.Statement s2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        rset = s2.executeQuery("Select ID FROM USERNAME.DB");
-        rset.afterLast();
-        
-        while(rset.previous()){
-        val = rset.getInt("ID");
-        break;
-        }
-        
+                  
+                ResultSet rset;
+                java.sql.Statement s2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                rset = s2.executeQuery("Select ID FROM USERNAME.DB");
+                rset.afterLast();
+
+                while(rset.previous()){
+                val = rset.getInt("ID");
+                valCheck = rset.getInt("ID") + 1;
+                break;
+                }
+
        
        
-       JOptionPane.showMessageDialog(null, val);
-                prepared.setInt(1, val+1);
+       JOptionPane.showMessageDialog(null, val+1);
+                prepared.setInt(1, (val == valCheck) ? val : valCheck);
                 prepared.setString(2, name);
                 prepared.setLong(3, Long.parseLong(phone));
                 prepared.setInt(4, rent);
@@ -419,6 +443,17 @@ public class main extends javax.swing.JFrame {
             evt.consume();
             
         }
+        
+        if(!(theName.getText().equals("") || theAddress.getText().equals("") || !(thePhoneNumber.getText().length() >= 10 && !(thePhoneNumber.getText().length() < 10))) ){
+        theVehicle.setEnabled(true);
+       
+        }
+                else{
+        theVehicle.setEnabled(false);
+        }   
+        
+        
+        
     }//GEN-LAST:event_thePhoneNumberKeyTyped
 
     private void theIDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_theIDKeyTyped
@@ -457,6 +492,7 @@ public class main extends javax.swing.JFrame {
         rentDuration.setValue(1);
          theVehicle.setSelectedIndex(0);
         receipt.setText("");
+        theVehicle.setEnabled(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -560,6 +596,156 @@ public class main extends javax.swing.JFrame {
                     + "\nPick Up Date: \t " + date+ "\nTotal Bill: \t P " + bill);
             }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void theVehicleItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_theVehicleItemStateChanged
+        // TODO add your handling code here:
+        
+               String name = theName.getText();
+            String address = theAddress.getText();
+            String phone = (thePhoneNumber.getText());
+            int rent = (int)rentDuration.getValue();
+            String vehicle = theVehicle.getSelectedItem().toString();
+            String id = theID.getText();
+            int selectedRow = 0;
+            
+            
+        if(theVehicle.getSelectedIndex() == 0 ){
+            bill = rent * 2000;}
+        else if((theVehicle.getSelectedIndex() == 1 )){
+             bill = rent * 1500;}
+        else if((theVehicle.getSelectedIndex() == 2 )){
+             bill = rent * 2500;}
+        else if((theVehicle.getSelectedIndex() == 3 )){
+            bill = rent * 2500;}
+        else if((theVehicle.getSelectedIndex() == 4 )){
+             bill = rent * 3000;}
+        else if((theVehicle.getSelectedIndex() == 5 )){
+             bill = rent * 3500;}
+        else if((theVehicle.getSelectedIndex() == 6 )){
+             bill = rent * 1500;}
+        else if((theVehicle.getSelectedIndex() == 7 )){
+             bill = rent * 1500;}        
+        else if((theVehicle.getSelectedIndex() == 8 )){
+             bill = rent * 1500;}
+        else if((theVehicle.getSelectedIndex() == 9 )){
+             bill = rent * 2500;}
+            
+            
+            String date = dateChooserCombo1.getText();
+        
+            
+            
+            
+            if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
+           
+            JOptionPane.showMessageDialog(null, "Please fill all necessary informations");
+            
+            }
+            
+            else {
+                jButton1.setVisible(true);
+        receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"  
+                    + "Rent Duration: \t " +String.valueOf(rent) + " days" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()
+                    + "\nPick Up Date: \t " + date+ "\nTotal Bill: \t P " + bill);
+            }
+    }//GEN-LAST:event_theVehicleItemStateChanged
+
+    private void theVehicleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_theVehicleMouseClicked
+        // TODO add your handling code here:
+        
+        if(!theVehicle.isEnabled()){
+            JOptionPane.showMessageDialog(null, "One TextField was not filled or Phone Number is not Valid");
+        
+        }
+        
+         
+    }//GEN-LAST:event_theVehicleMouseClicked
+
+    private void theNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_theNameKeyTyped
+        // TODO add your handling code here:
+        
+                if(!(theName.getText().equals("") || theAddress.getText().equals("") || !(thePhoneNumber.getText().length() >= 11)) ){
+        theVehicle.setEnabled(true);
+       
+        }
+        else
+        theVehicle.setEnabled(false);
+    }//GEN-LAST:event_theNameKeyTyped
+
+    private void theAddressKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_theAddressKeyTyped
+        // TODO add your handling code here:
+        
+        
+        
+                
+                if(!(theName.getText().equals("") || theAddress.getText().equals("") || !(thePhoneNumber.getText().length() >= 11)) ){
+        theVehicle.setEnabled(true);
+       
+        }
+                else{
+        theVehicle.setEnabled(false);
+    }   
+        
+    }//GEN-LAST:event_theAddressKeyTyped
+
+    private void dateChooserCombo1OnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dateChooserCombo1OnSelectionChange
+        // TODO add your handling code here:
+        
+              
+    }//GEN-LAST:event_dateChooserCombo1OnSelectionChange
+
+    private void dateChooserCombo1OnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dateChooserCombo1OnCommit
+        // TODO add your handling code here:
+         String name = theName.getText();
+            String address = theAddress.getText();
+            String phone = (thePhoneNumber.getText());
+            int rent = (int)rentDuration.getValue();
+            String vehicle = theVehicle.getSelectedItem().toString();
+            String id = theID.getText();
+            int selectedRow = 0;
+            
+            
+        if(theVehicle.getSelectedIndex() == 0 ){
+            bill = rent * 2000;}
+        else if((theVehicle.getSelectedIndex() == 1 )){
+             bill = rent * 1500;}
+        else if((theVehicle.getSelectedIndex() == 2 )){
+             bill = rent * 2500;}
+        else if((theVehicle.getSelectedIndex() == 3 )){
+            bill = rent * 2500;}
+        else if((theVehicle.getSelectedIndex() == 4 )){
+             bill = rent * 3000;}
+        else if((theVehicle.getSelectedIndex() == 5 )){
+             bill = rent * 3500;}
+        else if((theVehicle.getSelectedIndex() == 6 )){
+             bill = rent * 1500;}
+        else if((theVehicle.getSelectedIndex() == 7 )){
+             bill = rent * 1500;}        
+        else if((theVehicle.getSelectedIndex() == 8 )){
+             bill = rent * 1500;}
+        else if((theVehicle.getSelectedIndex() == 9 )){
+             bill = rent * 2500;}
+            
+            
+            String date = dateChooserCombo1.getText();
+        
+            
+            
+            
+            if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
+           
+            JOptionPane.showMessageDialog(null, "Please fill all necessary informations");
+            
+            }
+            
+            else {
+                jButton1.setVisible(true);
+        receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"  
+                    + "Rent Duration: \t " +String.valueOf(rent) + " days" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()
+                    + "\nPick Up Date: \t " + date+ "\nTotal Bill: \t P " + bill);
+            }
+        
+    }//GEN-LAST:event_dateChooserCombo1OnCommit
 
     
 //    private void update_Table(){

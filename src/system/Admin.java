@@ -13,6 +13,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
@@ -28,7 +31,7 @@ public class Admin extends javax.swing.JFrame {
         Connection conn;
         java.sql.Statement statement;
         ResultSet rs;
-        PreparedStatement prepared;
+        PreparedStatement prepared,pt;
         int selectedRow;
     /**
      * Creates new form 
@@ -36,7 +39,7 @@ public class Admin extends javax.swing.JFrame {
     public Admin() throws SQLException{
         initComponents();
         setTitle("Admin");
-        setSize(1253, 768);
+        setSize(1270, 816);
         setResizable(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
@@ -44,6 +47,8 @@ public class Admin extends javax.swing.JFrame {
         editor.setEditable(false);
         conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
         statement = conn.createStatement();
+        pt = conn.prepareStatement("ALTER TABLE USERNAME.DB ALTER COLUMN VEHICLE SET DATA TYPE varchar(50)");
+        pt.executeUpdate();
         rs = statement.executeQuery("Select * from USERNAME.DB ORDER BY ID ASC");
         jTable1.setModel(DbUtils.resultSetToTableModel(rs));
         
@@ -71,9 +76,31 @@ public class Admin extends javax.swing.JFrame {
         dbList2 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery2.getResultList();
         dbQuery3 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
         dbList3 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery3.getResultList();
+        dbQuery4 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList4 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery4.getResultList();
+        dbQuery5 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList5 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery5.getResultList();
+        dbQuery6 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList6 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery6.getResultList();
+        dbQuery7 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList7 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery7.getResultList();
+        dbQuery8 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList8 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery8.getResultList();
+        dbQuery9 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList9 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery9.getResultList();
+        dbQuery10 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList10 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery10.getResultList();
+        managementQuery = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT m FROM Management m");
+        managementList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : managementQuery.getResultList();
+        managementQuery1 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT m FROM Management m");
+        managementList1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : managementQuery1.getResultList();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         theVehicle = new javax.swing.JComboBox<>();
+        dateChooserCombo1 = new datechooser.beans.DateChooserCombo();
+        jLabel9 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -85,20 +112,34 @@ public class Admin extends javax.swing.JFrame {
         rentDuration = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
         theID = new javax.swing.JTextField();
+        jButton7 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jButton9 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        thePassword = new javax.swing.JTextField();
+        theUsername = new javax.swing.JTextField();
+        id = new javax.swing.JTextField();
         search = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
         status = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         filter = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        thePosition = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList3, jTable1);
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList10, jTable1);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
         columnBinding.setColumnName("Id");
         columnBinding.setColumnClass(Long.class);
@@ -120,6 +161,12 @@ public class Admin extends javax.swing.JFrame {
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${status}"));
         columnBinding.setColumnName("Status");
         columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${date}"));
+        columnBinding.setColumnName("Date");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${bill}"));
+        columnBinding.setColumnName("Bill");
+        columnBinding.setColumnClass(Integer.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
 
@@ -130,28 +177,80 @@ public class Admin extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        theVehicle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MITSUBISHI", "TOYOTA", "FORD", "BUGATTI", "LAMBORGHINI", "PORSHE" }));
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(390, 40, 860, 390);
+
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, managementList1, jTable2);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${username}"));
+        columnBinding.setColumnName("Username");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${password}"));
+        columnBinding.setColumnName("Password");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${position}"));
+        columnBinding.setColumnName("Position");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jTable2);
+
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(389, 480, 860, 220);
+
+        theVehicle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MITSUBISHI ADVENTURE 2.5 GLX", "MITSUBISHI MIRAGE GLX 1.6", "TOYOTA INNOVA 2.5 E", "TOYOTA HI-ACE COMMUTER 2.8", "TOYOTA HI-ACE GRANDIA 3.0", "TOYOTA HI-ACE SUPER GRANDIA 3.0", "TOYOTA VIOS 1.3 E", "TOYOTA AVANZA 1.5 J", "HYUNDAI ACCENT 1.6", "HYUNDAI STAREX 2.4" }));
         theVehicle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 theVehicleActionPerformed(evt);
             }
         });
+        getContentPane().add(theVehicle);
+        theVehicle.setBounds(107, 206, 259, 28);
 
-        jLabel5.setText("Select Vehicle");
+        dateChooserCombo1.setCalendarPreferredSize(new java.awt.Dimension(350, 300));
+        getContentPane().add(dateChooserCombo1);
+        dateChooserCombo1.setBounds(110, 290, 260, 30);
+
+        jLabel9.setText("Pick-Up Date");
+        getContentPane().add(jLabel9);
+        jLabel9.setBounds(20, 290, 90, 30);
+
+        jLabel5.setText("Vehicle");
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(20, 213, 83, 14);
 
         jLabel6.setText("Client ID");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(20, 52, 83, 14);
 
         jLabel1.setText("Client Name");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(20, 83, 86, 14);
 
         jLabel2.setText("Address");
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(20, 114, 86, 14);
 
         jLabel3.setText("Phone Number");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(20, 140, 70, 25);
+        getContentPane().add(theName);
+        theName.setBounds(110, 78, 259, 25);
+        getContentPane().add(theAddress);
+        theAddress.setBounds(110, 109, 259, 25);
 
         thePhoneNumber.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 thePhoneNumberKeyTyped(evt);
             }
         });
+        getContentPane().add(thePhoneNumber);
+        thePhoneNumber.setBounds(106, 140, 259, 25);
 
         rentDuration.setModel(new javax.swing.SpinnerNumberModel(1, 1, 40, 1));
         rentDuration.setFocusable(false);
@@ -160,14 +259,38 @@ public class Admin extends javax.swing.JFrame {
                 rentDurationKeyTyped(evt);
             }
         });
+        getContentPane().add(rentDuration);
+        rentDuration.setBounds(106, 171, 259, 29);
 
         jLabel4.setText("Rent Duration");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(20, 178, 82, 14);
 
         theID.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 theIDKeyTyped(evt);
             }
         });
+        getContentPane().add(theID);
+        theID.setBounds(110, 47, 259, 25);
+
+        jButton7.setText("Delete");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton7);
+        jButton7.setBounds(240, 640, 110, 25);
+
+        jButton6.setText("Add");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton6);
+        jButton6.setBounds(110, 640, 110, 25);
 
         jButton1.setText("Change");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -175,6 +298,8 @@ public class Admin extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(110, 340, 110, 25);
 
         jButton2.setText("Delete");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -182,6 +307,8 @@ public class Admin extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2);
+        jButton2.setBounds(110, 370, 110, 25);
 
         jButton3.setText("Reset");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -189,6 +316,8 @@ public class Admin extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton3);
+        jButton3.setBounds(110, 400, 110, 23);
 
         jButton4.setText("Back");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -196,15 +325,55 @@ public class Admin extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton4);
+        jButton4.setBounds(1120, 720, 127, 23);
+
+        jLabel11.setText("State");
+        getContentPane().add(jLabel11);
+        jLabel11.setBounds(20, 600, 83, 30);
+
+        jLabel12.setText("Modifying..");
+        getContentPane().add(jLabel12);
+        jLabel12.setBounds(20, 480, 83, 30);
 
         jLabel7.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
         jLabel7.setText("Search by :");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(395, 15, 51, 13);
+
+        jButton9.setText("Change");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton9);
+        jButton9.setBounds(110, 670, 110, 25);
+
+        jButton8.setText("Reset");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton8);
+        jButton8.setBounds(240, 670, 110, 23);
+        getContentPane().add(thePassword);
+        thePassword.setBounds(110, 560, 240, 30);
+        getContentPane().add(theUsername);
+        theUsername.setBounds(110, 520, 240, 30);
+
+        id.setEnabled(false);
+        getContentPane().add(id);
+        id.setBounds(110, 480, 240, 30);
 
         search.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 searchKeyTyped(evt);
             }
         });
+        getContentPane().add(search);
+        search.setBounds(523, 11, 382, 20);
 
         jButton5.setBackground(new java.awt.Color(255, 255, 255));
         jButton5.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
@@ -214,6 +383,8 @@ public class Admin extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton5);
+        jButton5.setBounds(915, 11, 63, 20);
 
         status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ON USE", "SCHEDULED", "ONHOLD", "NOT RETURNED", "RETURNED" }));
         status.addActionListener(new java.awt.event.ActionListener() {
@@ -221,8 +392,12 @@ public class Admin extends javax.swing.JFrame {
                 statusActionPerformed(evt);
             }
         });
+        getContentPane().add(status);
+        status.setBounds(107, 248, 259, 28);
 
-        jLabel8.setText("Select Vehicle");
+        jLabel8.setText("Vehicle Status");
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(20, 255, 83, 14);
 
         filter.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
         filter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NAME", "ADDRESS", "PHONE", "VEHICLE", "STATUS" }));
@@ -231,121 +406,25 @@ public class Admin extends javax.swing.JFrame {
                 filterActionPerformed(evt);
             }
         });
+        getContentPane().add(filter);
+        filter.setBounds(450, 14, 67, 16);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(1047, Short.MAX_VALUE)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(79, 79, 79))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(22, 22, 22))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(theID, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(theName, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(theAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(rentDuration)
-                                    .addComponent(thePhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(theVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(filter, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 849, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(filter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(theID, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(theName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(theAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(thePhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(rentDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(theVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 288, Short.MAX_VALUE)
-                .addComponent(jButton4)
-                .addGap(25, 25, 25))
-        );
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel10.setText("Employee & Admin");
+        getContentPane().add(jLabel10);
+        jLabel10.setBounds(20, 440, 240, 22);
+
+        thePosition.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Employee", "Admin" }));
+        getContentPane().add(thePosition);
+        thePosition.setBounds(110, 600, 240, 30);
+
+        jLabel13.setText("Password");
+        getContentPane().add(jLabel13);
+        jLabel13.setBounds(20, 560, 83, 30);
+
+        jLabel14.setText("Username");
+        getContentPane().add(jLabel14);
+        jLabel14.setBounds(20, 520, 83, 30);
 
         bindingGroup.bind();
 
@@ -355,28 +434,44 @@ public class Admin extends javax.swing.JFrame {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         selectedRow = jTable1.getSelectedRow();
+        
         //        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         theID.setText(jTable1.getModel().getValueAt(selectedRow, 0).toString());
         theName.setText(jTable1.getModel().getValueAt(selectedRow, 1).toString());
         thePhoneNumber.setText(jTable1.getModel().getValueAt(selectedRow, 2).toString());
         rentDuration.setValue(jTable1.getModel().getValueAt(selectedRow, 3));
         theAddress.setText(jTable1.getModel().getValueAt(selectedRow, 5).toString());
-        
+            Calendar aDate = Calendar.getInstance();
+            
+       
+            
+//        dateChooserCombo1.setText(jTable1.getModel().getValueAt(selectedRow, 7).toString());
+//        dateChooserCombo1.setCurrent((Calendar) jTable1.getModel().getValueAt(selectedRow, 7));
+        dateChooserCombo1.setCurrent(aDate);
         
 //        Integer.valueOf(jTable1.getModel().getValueAt(selectedRow, 4).toString())
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("MITSUBISHI")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("MITSUBISHI ADVENTURE 2.5 GLX")){
             theVehicle.setSelectedIndex(0);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("MITSUBISHI MIRAGE GLX 1.6")){
             theVehicle.setSelectedIndex(1);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("FORD")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA INNOVA 2.5 E")){
             theVehicle.setSelectedIndex(2);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("BUGATTI")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE COMMUTER 2.8")){
             theVehicle.setSelectedIndex(3);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("LAMBORGHINI")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE GRANDIA 3.0")){
             theVehicle.setSelectedIndex(4);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("PORSHE")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE SUPER GRANDIA 3.0")){
             theVehicle.setSelectedIndex(5);}
-        
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA VIOS 1.3 E")){
+            theVehicle.setSelectedIndex(6);}
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA AVANZA 1.5 J")){
+            theVehicle.setSelectedIndex(7);}        
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("HYUNDAI ACCENT 1.6")){
+            theVehicle.setSelectedIndex(8);}
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("HYUNDAI STAREX 2.4")){
+            theVehicle.setSelectedIndex(9);}
+
+
         
          if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("ON USE")){
              status.setSelectedIndex(0);}
@@ -441,7 +536,7 @@ public class Admin extends javax.swing.JFrame {
             String vehicle = theVehicle.getSelectedItem().toString();
             String currentStatus = status.getSelectedItem().toString();
             String id = theID.getText();
-            
+            String date = dateChooserCombo1.getText();
             if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
            
             JOptionPane.showMessageDialog(null, "Incomplete Information");
@@ -452,8 +547,8 @@ public class Admin extends javax.swing.JFrame {
             else
             // TODO add your handling code here:
 
-        
-            prepared = (PreparedStatement) conn.prepareStatement("UPDATE USERNAME.DB SET ID = ?, NAME = ?, PHONE = ?, RENT = ?, VEHICLE = ?, ADDRESS = ?, STATUS = ? WHERE ID = ?");
+            
+            prepared = (PreparedStatement) conn.prepareStatement("UPDATE USERNAME.DB SET ID = ?, NAME = ?, PHONE = ?, RENT = ?, VEHICLE = ?, ADDRESS = ?, STATUS = ?, DATE = ? WHERE ID = ?");
             prepared.setInt(1, Integer.valueOf(id));
             prepared.setString(2, name);
             prepared.setLong(3, Long.parseLong(phone));
@@ -461,7 +556,8 @@ public class Admin extends javax.swing.JFrame {
             prepared.setString(5, vehicle);
             prepared.setString(6, address);
             prepared.setString(7, currentStatus);
-            prepared.setString(8, jTable1.getModel().getValueAt(selectedRow, 0).toString());
+            prepared.setString(8, date);
+            prepared.setString(9, jTable1.getModel().getValueAt(selectedRow, 0).toString());
             JOptionPane.showMessageDialog(null, "PROFILE SUCCESSFULLY CHANGED");
             prepared.executeUpdate();
             statement.close();
@@ -506,11 +602,12 @@ public class Admin extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         update_Table();
+        search.setText("");
         theID.setText("");
         theName.setText("");
         theAddress.setText("");
         thePhoneNumber.setText("");
-        rentDuration.setValue(0);
+        rentDuration.setValue(1);
          theVehicle.setSelectedIndex(0);
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -581,6 +678,140 @@ public class Admin extends javax.swing.JFrame {
    }
     }//GEN-LAST:event_searchKeyTyped
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        if(theUsername.getText().equals("") || thePassword.getText().equals("")){
+        
+        JOptionPane.showMessageDialog(null, "Please Fill Necessary Information/s");
+        
+        }
+        else
+         try {
+             prepared = (PreparedStatement) conn.prepareStatement("INSERT INTO USERNAME.MANAGEMENT (USERNAME, PASSWORD, POSITION) VALUES (?,?,?)");
+             prepared.setString(1, theUsername.getText());
+             prepared.setString(2, thePassword.getText());
+             prepared.setString(3, thePosition.getSelectedItem().toString());
+             prepared.executeUpdate();
+             statement.close();
+             conn.close();
+             JOptionPane.showMessageDialog(null, thePosition.getSelectedItem().toString() + " Added");
+             
+             
+             
+        } catch (SQLException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        update_Table_MANAGEMENT();
+        theUsername.setText("");
+        thePassword.setText("");
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        // TODO add your handling code here:
+         int row = jTable2.getSelectedRow();
+          id.setText(jTable2.getModel().getValueAt(row, 0).toString()); 
+          theUsername.setText(jTable2.getModel().getValueAt(row, 0).toString());
+          thePassword.setText(jTable2.getModel().getValueAt(row, 1).toString());
+
+
+
+         if((jTable2.getModel().getValueAt(row, 2 ).toString()).equals("Employee")){
+             thePosition.setSelectedIndex(0);
+            
+    }       else if((jTable2.getModel().getValueAt(row, 2).toString()).equals("Admin")){
+             thePosition.setSelectedIndex(1);
+    }
+         
+         
+        
+    }//GEN-LAST:event_jTable2MouseClicked
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+             if(theUsername.getText().equals("") || thePassword.getText().equals("")){
+        
+        JOptionPane.showMessageDialog(null, "Can't Delete");
+        
+        }
+             else{
+                 try {
+                     prepared = (PreparedStatement) conn.prepareStatement("DELETE FROM USERNAME.MANAGEMENT WHERE USERNAME = ?");
+                     prepared.setString(1, theUsername.getText());
+                     prepared.executeUpdate();
+                     statement.close();
+                     conn.close();
+                     JOptionPane.showMessageDialog(null, "Deleted");
+                    
+                 } catch (SQLException ex) {
+                     Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             
+               update_Table_MANAGEMENT();
+              theUsername.setText("");
+               thePassword.setText("");
+                     
+             
+             }
+        
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        theUsername.setText("");
+        thePassword.setText("");
+        update_Table_MANAGEMENT();
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        
+                
+                
+        if(theUsername.getText().equals("") || thePassword.getText().equals("")){
+        
+        JOptionPane.showMessageDialog(null, "Incomplete Information/s");
+        
+        }
+        else
+        {
+            try {
+//                if(thePosition.getSelectedIndex() == 0){
+//                pos = "Employee";
+//                }
+//                else if(thePosition.getSelectedIndex() == 1){
+//                pos = "Admin";
+//                }
+                
+                
+                
+                
+                
+                prepared = (PreparedStatement) conn.prepareStatement("UPDATE USERNAME.MANAGEMENT SET USERNAME = ?, PASSWORD = ?, POSITION = ?  WHERE USERNAME = ?");
+                prepared.setString(1, theUsername.getText());
+                prepared.setString(2, thePassword.getText());
+                prepared.setString(3, String.valueOf(thePosition.getSelectedItem()));
+                prepared.setString(4, id.getText());
+                prepared.executeUpdate();
+                statement.close();
+                conn.close();
+                update_Table_MANAGEMENT();
+                JOptionPane.showMessageDialog(null, id.getText() + " has been updated.");
+                id.setText("");
+                theUsername.setText("");
+                thePassword.setText("");
+                thePosition.setSelectedIndex(0);
+            } catch (SQLException ex) {
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+      
+        
+        
+        
+        }
+        
+    }//GEN-LAST:event_jButton9ActionPerformed
+
     
     
     
@@ -595,6 +826,37 @@ public class Admin extends javax.swing.JFrame {
     prepared = conn.prepareStatement(sql);
     rs = prepared.executeQuery();
     jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+    
+    }
+    catch(Exception e){
+    JOptionPane.showMessageDialog(null, e);
+    
+    }
+    finally{
+    try{
+    
+    rs.close();
+    prepared.close();
+    
+    }
+    catch (Exception e){}
+    }
+    
+    
+    try{prepared.close();}
+    catch(Exception e){}
+    }
+     
+     
+     
+       private void update_Table_MANAGEMENT(){
+    try{
+
+    String sql = "Select * from USERNAME.MANAGEMENT ORDER BY USERNAME ASC";
+    conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
+    prepared = conn.prepareStatement(sql);
+    rs = prepared.executeQuery();
+    jTable2.setModel(DbUtils.resultSetToTableModel(rs));
     
     }
     catch(Exception e){
@@ -721,21 +983,46 @@ public class Admin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager IT301_System_PUEntityManager;
+    private datechooser.beans.DateChooserCombo dateChooserCombo1;
     private java.util.List<system.Db> dbList;
     private java.util.List<system.Db> dbList1;
+    private java.util.List<system.Db> dbList10;
     private java.util.List<system.Db> dbList2;
     private java.util.List<system.Db> dbList3;
+    private java.util.List<system.Db> dbList4;
+    private java.util.List<system.Db> dbList5;
+    private java.util.List<system.Db> dbList6;
+    private java.util.List<system.Db> dbList7;
+    private java.util.List<system.Db> dbList8;
+    private java.util.List<system.Db> dbList9;
     private javax.persistence.Query dbQuery;
     private javax.persistence.Query dbQuery1;
+    private javax.persistence.Query dbQuery10;
     private javax.persistence.Query dbQuery2;
     private javax.persistence.Query dbQuery3;
+    private javax.persistence.Query dbQuery4;
+    private javax.persistence.Query dbQuery5;
+    private javax.persistence.Query dbQuery6;
+    private javax.persistence.Query dbQuery7;
+    private javax.persistence.Query dbQuery8;
+    private javax.persistence.Query dbQuery9;
     private javax.swing.JComboBox<String> filter;
+    private javax.swing.JTextField id;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -743,15 +1030,25 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private java.util.List<system.Management> managementList;
+    private java.util.List<system.Management> managementList1;
+    private javax.persistence.Query managementQuery;
+    private javax.persistence.Query managementQuery1;
     private javax.swing.JSpinner rentDuration;
     private javax.swing.JTextField search;
     private javax.swing.JComboBox<String> status;
     private javax.swing.JTextField theAddress;
     private javax.swing.JTextField theID;
     private javax.swing.JTextField theName;
+    private javax.swing.JTextField thePassword;
     private javax.swing.JTextField thePhoneNumber;
+    private javax.swing.JComboBox<String> thePosition;
+    private javax.swing.JTextField theUsername;
     private javax.swing.JComboBox<String> theVehicle;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

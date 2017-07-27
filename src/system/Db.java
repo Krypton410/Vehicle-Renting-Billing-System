@@ -32,11 +32,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Db.findByPhone", query = "SELECT d FROM Db d WHERE d.phone = :phone")
     , @NamedQuery(name = "Db.findByRent", query = "SELECT d FROM Db d WHERE d.rent = :rent")
     , @NamedQuery(name = "Db.findByVehicle", query = "SELECT d FROM Db d WHERE d.vehicle = :vehicle")
-    , @NamedQuery(name = "Db.findByAddress", query = "SELECT d FROM Db d WHERE d.address = :address")})
+    , @NamedQuery(name = "Db.findByAddress", query = "SELECT d FROM Db d WHERE d.address = :address")
+    , @NamedQuery(name = "Db.findByStatus", query = "SELECT d FROM Db d WHERE d.status = :status")
+    , @NamedQuery(name = "Db.findByDate", query = "SELECT d FROM Db d WHERE d.date = :date")
+    , @NamedQuery(name = "Db.findByBill", query = "SELECT d FROM Db d WHERE d.bill = :bill")})
 public class Db implements Serializable {
-
-    @Column(name = "STATUS")
-    private String status;
 
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
@@ -56,6 +56,12 @@ public class Db implements Serializable {
     private String vehicle;
     @Column(name = "ADDRESS")
     private String address;
+    @Column(name = "STATUS")
+    private String status;
+    @Column(name = "DATE")
+    private String date;
+    @Column(name = "BILL")
+    private Integer bill;
 
     public Db() {
     }
@@ -124,6 +130,36 @@ public class Db implements Serializable {
         changeSupport.firePropertyChange("address", oldAddress, address);
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        String oldStatus = this.status;
+        this.status = status;
+        changeSupport.firePropertyChange("status", oldStatus, status);
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        String oldDate = this.date;
+        this.date = date;
+        changeSupport.firePropertyChange("date", oldDate, date);
+    }
+
+    public Integer getBill() {
+        return bill;
+    }
+
+    public void setBill(Integer bill) {
+        Integer oldBill = this.bill;
+        this.bill = bill;
+        changeSupport.firePropertyChange("bill", oldBill, bill);
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -155,16 +191,6 @@ public class Db implements Serializable {
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        String oldStatus = this.status;
-        this.status = status;
-        changeSupport.firePropertyChange("status", oldStatus, status);
     }
     
 }

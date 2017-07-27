@@ -3,6 +3,7 @@
   <persistence-unit name="IT301_System_PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>system.Db</class>
+    <class>system.Management</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/RentingSystemDB"/>
       <property name="javax.persistence.jdbc.user" value="username"/>

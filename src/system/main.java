@@ -18,6 +18,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
@@ -39,32 +42,42 @@ public class main extends javax.swing.JFrame {
      * Creates new form main
      */
     Connection conn;
-    java.sql.Statement statement;
-    ResultSet rs;
-    int id = 0;
-    PreparedStatement prepared;
+    java.sql.Statement statement, statement1;
+    ResultSet rs, ts;
+    int id = 0, row, col;
+     
+    double bill;
+    PreparedStatement prepared, pt;
     public main() throws SQLException{
         initComponents();
         setTitle("Vehicle Renting and Billing System");
-        setSize(1135, 518);
+        setSize(1201, 629);
         setResizable(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-        
+        getContentPane().setBackground(Color.decode("#1c5d72"));
         JFormattedTextField editor = ((JSpinner.DefaultEditor)rentDuration.getEditor()).getTextField();
         editor.setEditable(false);
+        Calendar aDate = Calendar.getInstance(Locale.ROOT);
+        dateChooserCombo1.setMinDate(aDate);
+        
+
+       
         
         conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
        
        
         statement = conn.createStatement();
+        pt = conn.prepareStatement("ALTER TABLE USERNAME.DB ALTER COLUMN VEHICLE SET DATA TYPE varchar(50)");
+        pt.executeUpdate();
         rs = statement.executeQuery("SELECT ID FROM USERNAME.DB ORDER BY ID DESC");
         jTable1.setModel(DbUtils.resultSetToTableModel(rs));
         id = jTable1.getRowCount();
         theID.setEditable(false);
-        theID.setText(String.valueOf(id + 1));
         
+//        theID.setText(String.valueOf(id + 1 + 1));
         
+        jButton1.setVisible(false);
         
        
         while(rs.next());
@@ -101,6 +114,7 @@ public class main extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         IT301_System_PUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("IT301_System_PU").createEntityManager();
         dbQuery = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
@@ -109,6 +123,8 @@ public class main extends javax.swing.JFrame {
         dbList1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery1.getResultList();
         dbQuery2 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
         dbList2 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery2.getResultList();
+        dbQuery3 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList3 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery3.getResultList();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -120,7 +136,6 @@ public class main extends javax.swing.JFrame {
         theVehicle = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         receipt = new javax.swing.JTextArea();
@@ -129,22 +144,37 @@ public class main extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jButton6 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        dateChooserCombo1 = new datechooser.beans.DateChooserCombo();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(javax.swing.UIManager.getDefaults().getColor("Button.highlight"));
+        getContentPane().setLayout(null);
 
         jLabel1.setText("Name");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(730, 60, 39, 14);
 
         jLabel2.setText("Address");
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(730, 100, 51, 14);
 
         jLabel3.setText("Phone Number");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(730, 120, 90, 25);
+        getContentPane().add(theName);
+        theName.setBounds(820, 60, 356, 25);
+        getContentPane().add(theAddress);
+        theAddress.setBounds(820, 90, 356, 25);
 
         thePhoneNumber.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 thePhoneNumberKeyTyped(evt);
             }
         });
+        getContentPane().add(thePhoneNumber);
+        thePhoneNumber.setBounds(820, 120, 356, 25);
 
         rentDuration.setModel(new javax.swing.SpinnerNumberModel(1, 1, 40, 1));
         rentDuration.setFocusable(false);
@@ -153,17 +183,25 @@ public class main extends javax.swing.JFrame {
                 rentDurationKeyTyped(evt);
             }
         });
+        getContentPane().add(rentDuration);
+        rentDuration.setBounds(820, 150, 356, 29);
 
         jLabel4.setText("Rent Duration");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(730, 160, 82, 14);
 
-        theVehicle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MITSUBISHI", "TOYOTA", "FORD", "BUGATTI", "LAMBORGHINI", "PORSHE" }));
+        theVehicle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MITSUBISHI ADVENTURE 2.5 GLX", "MITSUBISHI MIRAGE GLX 1.6", "TOYOTA INNOVA 2.5 E", "TOYOTA HI-ACE COMMUTER 2.8", "TOYOTA HI-ACE GRANDIA 3.0", "TOYOTA HI-ACE SUPER GRANDIA 3.0", "TOYOTA VIOS 1.3 E", "TOYOTA AVANZA 1.5 J", "HYUNDAI ACCENT 1.6", "HYUNDAI STAREX 2.4" }));
         theVehicle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 theVehicleActionPerformed(evt);
             }
         });
+        getContentPane().add(theVehicle);
+        theVehicle.setBounds(820, 190, 356, 28);
 
-        jLabel5.setText("Select Vehicle");
+        jLabel5.setText("Pick-Up Date");
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(730, 230, 83, 30);
 
         jButton1.setBackground(new java.awt.Color(169, 80, 21));
         jButton1.setText("Save");
@@ -172,22 +210,18 @@ public class main extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(750, 560, 410, 23);
 
-        jButton2.setBackground(new java.awt.Color(169, 80, 21));
-        jButton2.setText(" Clear");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setBackground(new java.awt.Color(169, 80, 21));
+        jButton3.setBackground(Color.decode("#228aad"));
         jButton3.setText("Reset");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton3);
+        jButton3.setBounds(1070, 310, 103, 23);
 
         receipt.setEditable(false);
         receipt.setColumns(20);
@@ -195,27 +229,43 @@ public class main extends javax.swing.JFrame {
         receipt.setRows(5);
         jScrollPane2.setViewportView(receipt);
 
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(730, 350, 443, 240);
+
         theID.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 theIDKeyTyped(evt);
             }
         });
+        getContentPane().add(theID);
+        theID.setBounds(820, 30, 356, 25);
 
-        jButton4.setBackground(new java.awt.Color(169, 80, 21));
+        jButton4.setBackground(Color.decode("#228aad"));
         jButton4.setText("Admin");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton4);
+        jButton4.setBounds(860, 280, 120, 23);
 
-        jButton5.setBackground(new java.awt.Color(169, 80, 21));
+        jButton5.setBackground(Color.decode("#228aad"));
         jButton5.setText("View");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton5);
+        jButton5.setBounds(860, 310, 120, 23);
+
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList3, jTable1);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
+        columnBinding.setColumnName("Id");
+        columnBinding.setColumnClass(Long.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
 
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -224,101 +274,34 @@ public class main extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/system/car_3.jpg"))); // NOI18N
-        jLabel6.setPreferredSize(new java.awt.Dimension(600, 599));
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(730, 30, 44, 25);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(36, 36, 36))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(48, 48, 48))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(43, 43, 43)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(theAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(theName, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(theID, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(rentDuration)
-                            .addComponent(thePhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(theVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(theID)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(theName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(theAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(thePhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(rentDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(theVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3)
-                            .addComponent(jButton4)
-                            .addComponent(jButton5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 8, Short.MAX_VALUE))
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+        jButton6.setBackground(Color.decode("#228aad"));
+        jButton6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jButton6.setText("Confirm Rent");
+        jButton6.setActionCommand("");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton6);
+        jButton6.setBounds(1070, 280, 103, 23);
+
+        jLabel6.setText("Select Vehicle");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(730, 200, 83, 14);
+
+        dateChooserCombo1.setCalendarPreferredSize(new java.awt.Dimension(350, 300));
+        getContentPane().add(dateChooserCombo1);
+        dateChooserCombo1.setBounds(820, 230, 355, 30);
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/system/ezgif.com-gif-maker (1).gif"))); // NOI18N
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(20, 20, 690, 330);
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -328,42 +311,90 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_theVehicleActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {           
-            rentDuration.setFocusable(false);
+        try {                                         
+            main m = new main();
+            try {
+                rentDuration.setFocusable(false);
                 
-            String name = theName.getText();
-            String address = theAddress.getText();
-            String phone = (thePhoneNumber.getText());
-            int rent = (int)rentDuration.getValue();
-            String vehicle = theVehicle.getSelectedItem().toString();
-            String id = theID.getText();
-            
-            if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
-           
-            JOptionPane.showMessageDialog(null, "Please fill all necessary informations");
-            
-            }
-            
-            
-            else
-            // TODO add your handling code here:
-
+                String name = theName.getText();
+                String address = theAddress.getText();
+                String phone = (thePhoneNumber.getText());
+                int rent = (int)rentDuration.getValue();
+                int val = 0;
+                String vehicle = theVehicle.getSelectedItem().toString();
+                String id = theID.getText();
+                String date = dateChooserCombo1.getText();
+                if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
+                    
+                    JOptionPane.showMessageDialog(null, "Please fill all necessary informations");
+                    
+                }
+                
+                
+                else
+                    // TODO add your handling code here:
+                    
+                    
+                    prepared = (PreparedStatement) conn.prepareStatement("INSERT INTO USERNAME.DB (ID, NAME, PHONE, RENT, VEHICLE, ADDRESS, STATUS, DATE, BILL) VALUES (?,?,?,?,?,?,?,?,?)");
+                
+                       
+//       try{
+//       ts = statement1.executeQuery("SELECT MAX(ID) FROM USERNAME.DB");
+//       while(ts.next()){
+//       ts.last();
+//       val = ((ts.getInt("ID")));
+//       
+//       }
+//           
+//           
+//       }
+//       
+//       
+//       catch(Exception e){
+//       
+//       
+//       
+//       }
+//       
+        ResultSet rset;
+        java.sql.Statement s2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rset = s2.executeQuery("Select ID FROM USERNAME.DB");
+        rset.afterLast();
         
-            prepared = (PreparedStatement) conn.prepareStatement("INSERT INTO USERNAME.DB (ID, NAME, PHONE, RENT, VEHICLE, ADDRESS) VALUES (?,?,?,?,?,?)");
-            prepared.setInt(1, Integer.valueOf(id));
-            prepared.setString(2, name);
-            prepared.setLong(3, Long.parseLong(phone));
-            prepared.setInt(4, rent);
-            prepared.setString(5, vehicle);
-            prepared.setString(6, address);
-            JOptionPane.showMessageDialog(null, "Saved");
-            prepared.executeUpdate();
-            statement.close();
-            conn.close();
-            
-            receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"  
-                    + "Rent Duration: \t " +String.valueOf(rent) + " days");
-            
+        while(rset.previous()){
+        val = rset.getInt("ID");
+        break;
+        }
+        
+       
+       
+       JOptionPane.showMessageDialog(null, val);
+                prepared.setInt(1, val+1);
+                prepared.setString(2, name);
+                prepared.setLong(3, Long.parseLong(phone));
+                prepared.setInt(4, rent);
+                prepared.setString(5, vehicle);
+                prepared.setString(6, address);
+                prepared.setString(7, "SCHEDULED");
+                prepared.setString(8, date);
+                prepared.setDouble(9, bill);
+                JOptionPane.showMessageDialog(null, "Saved");
+                prepared.executeUpdate();
+                statement.close();
+                conn.close();
+               
+                receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"
+                        + "Rent Duration: \t " +String.valueOf(rent) + " days" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()+ "\nPick Up Date: \t " + date);
+                
+               
+               
+               jButton1.setVisible(false);
+//               theID.setText(String.valueOf(Integer.valueOf(theID.getText())+1));
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+//        update_Table();
         } catch (SQLException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -417,11 +448,6 @@ public class main extends javax.swing.JFrame {
         receipt.setText("");
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
            ViewPrompt vp = new ViewPrompt();
@@ -439,24 +465,90 @@ public class main extends javax.swing.JFrame {
         thePhoneNumber.setText(jTable1.getModel().getValueAt(selectedRow, 3).toString());
         rentDuration.setValue(jTable1.getModel().getValueAt(selectedRow, 4));
 
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("MITSUBISHI")){
+        
+                if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("MITSUBISHI ADVENTURE 2.5 GLX")){
             theVehicle.setSelectedIndex(0);}
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("TOYOTA")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("MITSUBISHI MIRAGE GLX 1.6")){
             theVehicle.setSelectedIndex(1);}
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("FORD")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA INNOVA 2.5 E")){
             theVehicle.setSelectedIndex(2);}
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("BUGATTI")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE COMMUTER 2.8")){
             theVehicle.setSelectedIndex(3);}
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("LAMBORGHINI")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE GRANDIA 3.0")){
             theVehicle.setSelectedIndex(4);}
-        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("PORSHE")){
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE SUPER GRANDIA 3.0")){
             theVehicle.setSelectedIndex(5);}
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA VIOS 1.3 E")){
+            theVehicle.setSelectedIndex(6);}
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA AVANZA 1.5 J")){
+            theVehicle.setSelectedIndex(7);}        
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("HYUNDAI ACCENT 1.6")){
+            theVehicle.setSelectedIndex(8);}
+        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("HYUNDAI STAREX 2.4")){
+            theVehicle.setSelectedIndex(9);}
+
+        
 
         //        receipt.setText("ID Number : \t\t" + jTable1.getModel().getValueAt(selectedRow, 0).toString() + "\n" + "Name: \t\t" + jTable1.getModel().getValueAt(selectedRow, 1).toString()
             //            + "\nAddress: \t\t" + jTable1.getModel().getValueAt(selectedRow, 2).toString()
             //            + "\nPhone Number: \t " + jTable1.getModel().getValueAt(selectedRow, 3).toString()+ "\n"
             //            + "Rent Duration: \t " +jTable1.getModel().getValueAt(selectedRow, 4).toString() + " days");
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+                  
+                  
+                  
+            String name = theName.getText();
+            String address = theAddress.getText();
+            String phone = (thePhoneNumber.getText());
+            int rent = (int)rentDuration.getValue();
+            String vehicle = theVehicle.getSelectedItem().toString();
+            String id = theID.getText();
+            int selectedRow = 0;
+            
+            
+        if(theVehicle.getSelectedIndex() == 0 ){
+            bill = rent * 2000;}
+        else if((theVehicle.getSelectedIndex() == 1 )){
+             bill = rent * 1500;}
+        else if((theVehicle.getSelectedIndex() == 2 )){
+             bill = rent * 2500;}
+        else if((theVehicle.getSelectedIndex() == 3 )){
+            bill = rent * 2500;}
+        else if((theVehicle.getSelectedIndex() == 4 )){
+             bill = rent * 3000;}
+        else if((theVehicle.getSelectedIndex() == 5 )){
+             bill = rent * 3500;}
+        else if((theVehicle.getSelectedIndex() == 6 )){
+             bill = rent * 1500;}
+        else if((theVehicle.getSelectedIndex() == 7 )){
+             bill = rent * 1500;}        
+        else if((theVehicle.getSelectedIndex() == 8 )){
+             bill = rent * 1500;}
+        else if((theVehicle.getSelectedIndex() == 9 )){
+             bill = rent * 2500;}
+            
+            
+            String date = dateChooserCombo1.getText();
+        
+            
+            
+            
+            if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
+           
+            JOptionPane.showMessageDialog(null, "Please fill all necessary informations");
+            
+            }
+            
+            else {
+                jButton1.setVisible(true);
+        receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"  
+                    + "Rent Duration: \t " +String.valueOf(rent) + " days" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()
+                    + "\nPick Up Date: \t " + date+ "\nTotal Bill: \t P " + bill);
+            }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     
 //    private void update_Table(){
@@ -532,23 +624,27 @@ public class main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager IT301_System_PUEntityManager;
+    private datechooser.beans.DateChooserCombo dateChooserCombo1;
     private java.util.List<system.Db> dbList;
     private java.util.List<system.Db> dbList1;
     private java.util.List<system.Db> dbList2;
+    private java.util.List<system.Db> dbList3;
     private javax.persistence.Query dbQuery;
     private javax.persistence.Query dbQuery1;
     private javax.persistence.Query dbQuery2;
+    private javax.persistence.Query dbQuery3;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
@@ -559,5 +655,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTextField theName;
     private javax.swing.JTextField thePhoneNumber;
     private javax.swing.JComboBox<String> theVehicle;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,6 +6,7 @@
 package system;
 
 import com.sun.glass.events.KeyEvent;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.Connection;
@@ -15,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 /**
@@ -33,6 +35,7 @@ public class Prompt extends javax.swing.JFrame {
         setResizable(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        getContentPane().setBackground(Color.decode("#2990b2"));
     }
 
     /**
@@ -97,6 +100,12 @@ public class Prompt extends javax.swing.JFrame {
             }
         });
 
+        password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordKeyPressed(evt);
+            }
+        });
+
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/system/Webp.net-resizeimage.png"))); // NOI18N
 
         jLabel3.setText("Admin's Account Login");
@@ -105,50 +114,55 @@ public class Prompt extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(58, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel3)
+                        .addGap(73, 73, 73)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton2))
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(username)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(38, 38, 38))
+                                .addGap(63, 63, 63)
+                                .addComponent(jButton2)))))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(37, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel3))
+                    .addComponent(jLabel1))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(32, 32, 32)
                         .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2)
-                            .addComponent(jButton1))))
-                .addGap(30, 30, 30))
+                            .addComponent(jButton1)
+                            .addComponent(jButton2))))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pack();
@@ -192,7 +206,7 @@ public class Prompt extends javax.swing.JFrame {
                 }
                     
                 else{
-                    JOptionPane.showMessageDialog(null, "Incorrect Username || Password");
+                    showMessage("Incorrect Username || Password","Information Error","E");
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Prompt.class.getName()).log(Level.SEVERE, null, ex);
@@ -214,48 +228,84 @@ public class Prompt extends javax.swing.JFrame {
 
     private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+          if(evt.getKeyCode()==KeyEvent.VK_ENTER){
         
-                try {
-            // TODO add your handling code here:
+      try {                                         
+            Connection conn;
+            PreparedStatement ps,prepared;
             Admin a = new Admin();
             
-            if(username.getText().equals("admin") && password.getText().equals("root")){
-                this.setVisible(false);
-                a.setVisible(true);
+            try {
+                // TODO add your handling code here:
                 
+                conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
+           
+             
+                ps = conn.prepareStatement("SELECT USERNAME, PASSWORD FROM USERNAME.MANAGEMENT WHERE USERNAME = ? AND PASSWORD = ? AND POSITION = 'Admin'");
+                ps.setString(1, username.getText());
+                ps.setString(2, password.getText());
+                ResultSet rs = ps.executeQuery();
+                if(rs.next()){a.setVisible(true);
+                
+                this.setVisible(false);
+                }
+                    
+                else{
+                    showMessage("Incorrect Username || Password","Information Error","E");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Prompt.class.getName()).log(Level.SEVERE, null, ex);
             }
-            else{
-                JOptionPane.showMessageDialog(null, "Incorrect Username || Password");
-            }
+            
+            
+            
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(Prompt.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         }
-        
     }//GEN-LAST:event_jButton1KeyPressed
 
     private void usernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameKeyPressed
         // TODO add your handling code here:
             if(evt.getKeyCode()==KeyEvent.VK_ENTER){
         
-                try {
-            // TODO add your handling code here:
+      try {                                         
+            Connection conn;
+            PreparedStatement ps,prepared;
             Admin a = new Admin();
             
-            if(username.getText().equals("admin") && password.getText().equals("root")){
-                this.setVisible(false);
-                a.setVisible(true);
+            try {
+                // TODO add your handling code here:
                 
+                conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
+           
+             
+                ps = conn.prepareStatement("SELECT USERNAME, PASSWORD FROM USERNAME.MANAGEMENT WHERE USERNAME = ? AND PASSWORD = ? AND POSITION = 'Admin'");
+                ps.setString(1, username.getText());
+                ps.setString(2, password.getText());
+                ResultSet rs = ps.executeQuery();
+                if(rs.next()){a.setVisible(true);
+                
+                this.setVisible(false);
+                }
+                    
+                else{
+                    
+                    showMessage("Incorrect Username || Password","Information Error","E");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Prompt.class.getName()).log(Level.SEVERE, null, ex);
             }
-            else{
-                JOptionPane.showMessageDialog(null, "Incorrect Username || Password");
-            }
+            
+            
+            
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(Prompt.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         }
     }//GEN-LAST:event_usernameKeyPressed
 
@@ -270,6 +320,58 @@ public class Prompt extends javax.swing.JFrame {
             password.setEchoChar('*');
         }
     }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    
+    
+        private JDialog showMessage(String s, String title, String type){
+    
+            JOptionPane jop = new JOptionPane(s, (type.equals("S")) ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
+            JDialog dialog = jop.createDialog(title);
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+            return dialog;
+    }
+    
+    private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
+        // TODO add your handling code here:
+                 if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        
+      try {                                         
+            Connection conn;
+            PreparedStatement ps,prepared;
+            Admin a = new Admin();
+            
+            try {
+                // TODO add your handling code here:
+                
+                conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
+           
+             
+                ps = conn.prepareStatement("SELECT USERNAME, PASSWORD FROM USERNAME.MANAGEMENT WHERE USERNAME = ? AND PASSWORD = ? AND POSITION = 'Admin'");
+                ps.setString(1, username.getText());
+                ps.setString(2, password.getText());
+                ResultSet rs = ps.executeQuery();
+                if(rs.next()){a.setVisible(true);
+                
+                this.setVisible(false);
+                }
+                    
+                else{
+                    showMessage("Incorrect Username || Password","Information Error","E");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Prompt.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Prompt.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+    }//GEN-LAST:event_passwordKeyPressed
 
     /**
      * @param args the command line arguments

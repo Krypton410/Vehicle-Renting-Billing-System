@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
@@ -90,27 +91,17 @@ public class main extends javax.swing.JFrame {
         theVehicle.setEnabled(true);
         
        
-        
-      
-        
-        
-//       JTextField tf = new JTextField();
-//       tf.setEditable(false);
-//       DefaultCellEditor editor = new DefaultCellEditor(tf);
-//       jTable1.setDefaultEditor(main.class, editor);
-//        
-//        jTable1.addMouseListener(new MouseAdapter(){
-//        @Override
-//        public void mouseClicked(MouseEvent m){
-//        Point p = m.getPoint();
-//         int row = jTable1.rowAtPoint(p);
-//         int col = jTable1.columnAtPoint(p);
-//         Object value = jTable1.getValueAt(row, col);
-//
-//        }  });
-//        
-        
+     
     }
+        private JDialog showMessage(String s, String title, String type){
+    
+            JOptionPane jop = new JOptionPane(s, (type.equals("S")) ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
+            JDialog dialog = jop.createDialog(title);
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+            return dialog;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -375,7 +366,8 @@ public class main extends javax.swing.JFrame {
                 String date = dateChooserCombo1.getText();
                 if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
                     
-                    JOptionPane.showMessageDialog(null, "Please fill all necessary informations");
+                    
+                    showMessage("Please fill all necessary informations", "Error","E");
                     
                 }
                 else if(thePhoneNumber.getText().length() != 11){
@@ -403,7 +395,7 @@ public class main extends javax.swing.JFrame {
 
        
        
-       JOptionPane.showMessageDialog(null, val+1);
+       
                 prepared.setInt(1, (val == valCheck) ? val : valCheck);
                 prepared.setString(2, name);
                 prepared.setLong(3, Long.parseLong(phone));
@@ -413,7 +405,8 @@ public class main extends javax.swing.JFrame {
                 prepared.setString(7, "SCHEDULED");
                 prepared.setString(8, date);
                 prepared.setDouble(9, bill);
-                JOptionPane.showMessageDialog(null, "Saved");
+                
+                showMessage("Saved", "Successful", "S");
                 prepared.executeUpdate();
                 statement.close();
                 conn.close();
@@ -585,7 +578,7 @@ public class main extends javax.swing.JFrame {
             
             if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
            
-            JOptionPane.showMessageDialog(null, "Please fill all necessary informations");
+            showMessage("Please fill all necessary informations", "Error","E");
             
             }
             
@@ -638,7 +631,7 @@ public class main extends javax.swing.JFrame {
             
             if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
            
-            JOptionPane.showMessageDialog(null, "Please fill all necessary informations");
+            showMessage("Please fill all necessary informations", "Error","E");
             
             }
             
@@ -654,7 +647,8 @@ public class main extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         if(!theVehicle.isEnabled()){
-            JOptionPane.showMessageDialog(null, "One TextField was not filled or Phone Number is not Valid");
+            
+            showMessage("One TextField was not filled or Phone Number is not Valid","Input Error","E");
         
         }
         
@@ -734,7 +728,7 @@ public class main extends javax.swing.JFrame {
             
             if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
            
-            JOptionPane.showMessageDialog(null, "Please fill all necessary informations");
+            showMessage("Please fill all necessary informations", "Error","E");
             
             }
             
@@ -748,36 +742,6 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_dateChooserCombo1OnCommit
 
     
-//    private void update_Table(){
-//    try{
-//        
-//        
-//    
-//    String sql = "Select * from USERNAME.DB ORDER BY ID ASC";
-//    conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
-//    prepared = conn.prepareStatement(sql);
-//    rs = prepared.executeQuery();
-//    jTable1.setModel(DbUtils.resultSetToTableModel(rs));
-//    
-//    }
-//    catch(Exception e){
-//    JOptionPane.showMessageDialog(null, e);
-//    
-//    }
-//    finally{
-//    try{
-//    
-//    rs.close();
-//    prepared.close();
-//    
-//    }
-//    catch (Exception e){}
-//    }
-//    
-//    
-//    try{prepared.close();}
-//    catch(Exception e){}
-//    }
     
     
     /**

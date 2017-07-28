@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
@@ -218,6 +219,7 @@ public class Admin extends javax.swing.JFrame {
         getContentPane().add(theVehicle);
         theVehicle.setBounds(107, 206, 259, 28);
 
+        dateChooserCombo1.setCalendarBackground(new java.awt.Color(51, 255, 51));
         dateChooserCombo1.setCalendarPreferredSize(new java.awt.Dimension(350, 300));
         getContentPane().add(dateChooserCombo1);
         dateChooserCombo1.setBounds(110, 290, 260, 30);
@@ -289,7 +291,7 @@ public class Admin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton10);
-        jButton10.setBounds(920, 448, 63, 20);
+        jButton10.setBounds(960, 448, 63, 20);
 
         jButton7.setText("Delete");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -384,7 +386,7 @@ public class Admin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(filter1);
-        filter1.setBounds(450, 450, 67, 16);
+        filter1.setBounds(450, 450, 110, 16);
 
         jLabel15.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
         jLabel15.setText("Search by :");
@@ -410,7 +412,7 @@ public class Admin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(search1);
-        search1.setBounds(530, 448, 382, 20);
+        search1.setBounds(570, 448, 382, 20);
 
         search.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -493,7 +495,7 @@ public class Admin extends javax.swing.JFrame {
 //        dateChooserCombo1.setText(jTable1.getModel().getValueAt(selectedRow, 7).toString());
 //        dateChooserCombo1.setCurrent((Calendar) jTable1.getModel().getValueAt(selectedRow, 7));
         dateChooserCombo1.setCurrent(aDate);
-        
+//        dateChooserCombo1.set
 //        Integer.valueOf(jTable1.getModel().getValueAt(selectedRow, 4).toString())
         if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("MITSUBISHI ADVENTURE 2.5 GLX")){
             theVehicle.setSelectedIndex(0);}
@@ -584,7 +586,8 @@ public class Admin extends javax.swing.JFrame {
             String date = dateChooserCombo1.getText();
             if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
            
-            JOptionPane.showMessageDialog(null, "Incomplete Information");
+            
+            showMessage("Incomplete Information.","Error","E");
             
             }
             
@@ -603,7 +606,8 @@ public class Admin extends javax.swing.JFrame {
             prepared.setString(7, currentStatus);
             prepared.setString(8, date);
             prepared.setString(9, jTable1.getModel().getValueAt(selectedRow, 0).toString());
-            JOptionPane.showMessageDialog(null, "PROFILE SUCCESSFULLY CHANGED");
+            
+            showMessage("CLIENT [" + name.toUpperCase() + "] SUCCESSFULLY CHANGED","Successful","S");
             prepared.executeUpdate();
             statement.close();
             conn.close();
@@ -619,13 +623,15 @@ public class Admin extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         if(theName.getText().equalsIgnoreCase("")){
-        JOptionPane.showMessageDialog(null, "Can't Perform Deletion");
+        
+        showMessage("Can't Perform Deletion" ,"Deletion Error","E");
         }
         else{
             try {
                 prepared = (PreparedStatement) conn.prepareStatement("DELETE FROM USERNAME.DB WHERE NAME = ?");
                 prepared.setString(1, theName.getText());
-                JOptionPane.showMessageDialog(null, "Deleted");
+                
+                showMessage("Client [ " + theName.getText() + " ] Deleted","Successful Delete","S");
                 prepared.executeUpdate();
                 statement.close();
                 conn.close();
@@ -732,6 +738,12 @@ public class Admin extends javax.swing.JFrame {
         }
         else
          try {
+             
+//             prepared = (PreparedStatement) conn.prepareStatement("SELECT USERNAME FROM USERNAME.MANAGEMENT WHERE USERNAME = ?");
+//             prepared.setString(1, id.getText());
+//             ResultSet resultSet = prepared.executeQuery();
+//             if(rs.next()){}
+//             else{}
              prepared = (PreparedStatement) conn.prepareStatement("INSERT INTO USERNAME.MANAGEMENT (USERNAME, PASSWORD, POSITION) VALUES (?,?,?)");
              prepared.setString(1, theUsername.getText());
              prepared.setString(2, thePassword.getText());
@@ -739,12 +751,18 @@ public class Admin extends javax.swing.JFrame {
              prepared.executeUpdate();
              statement.close();
              conn.close();
-             JOptionPane.showMessageDialog(null, thePosition.getSelectedItem().toString() + " Added");
-             
+//             JOptionPane.showMessageDialog(null, thePosition.getSelectedItem().toString() + " Added");
+             showMessage(thePosition.getSelectedItem().toString() + " [ " + theUsername.getText() +" ] Added", "Successfully Added", "S");
+                     
              
              
         } catch (SQLException ex) {
             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane jop = new JOptionPane(thePosition.getSelectedItem().toString() + " " + "[ " +id.getText() +" ]" + " already exist", JOptionPane.ERROR_MESSAGE);
+            JDialog dialog = jop.createDialog("Duplication Error");
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+//            JOptionPane.showMessageDialog(null, thePosition.getSelectedItem().toString() + " " + "[ " +id.getText() +" ]" + " already exist");
         }
         
         update_Table_MANAGEMENT();
@@ -776,7 +794,8 @@ public class Admin extends javax.swing.JFrame {
         // TODO add your handling code here:
              if(theUsername.getText().equals("") || thePassword.getText().equals("")){
         
-        JOptionPane.showMessageDialog(null, "Can't Delete");
+        
+        showMessage("Can't Delete" ,"Deletion Error" ,"E");
         
         }
              else{
@@ -803,6 +822,7 @@ public class Admin extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
+        id.setText("");
         theUsername.setText("");
         thePassword.setText("");
         update_Table_MANAGEMENT();
@@ -841,7 +861,8 @@ public class Admin extends javax.swing.JFrame {
                 statement.close();
                 conn.close();
                 update_Table_MANAGEMENT();
-                JOptionPane.showMessageDialog(null, id.getText() + " has been updated.");
+                showMessage("[" + id.getText() + "] has been updated.", "Update","S");
+                
                 id.setText("");
                 theUsername.setText("");
                 thePassword.setText("");
@@ -878,7 +899,14 @@ public class Admin extends javax.swing.JFrame {
     
     
     
+    private JDialog showMessage(String s, String title, String type){
     
+            JOptionPane jop = new JOptionPane(s, (type.equals("S")) ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
+            JDialog dialog = jop.createDialog(title);
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+            return dialog;
+    }
     
      private void update_Table(){
     try{

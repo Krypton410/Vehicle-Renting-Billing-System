@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
@@ -79,13 +80,17 @@ public class View extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        status = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
         filter = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
         search = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList4, jTable1);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
@@ -125,12 +130,31 @@ public class View extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(10, 56, 886, 359);
+
         jButton1.setText("Back");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(816, 426, 80, 23);
+
+        status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ON USE", "SCHEDULED", "ONHOLD", "NOT RETURNED", "RETURNED" }));
+        status.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statusActionPerformed(evt);
+            }
+        });
+        getContentPane().add(status);
+        status.setBounds(100, 420, 259, 20);
+
+        jLabel8.setForeground(new java.awt.Color(240, 240, 240));
+        jLabel8.setText("Vehicle Status");
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(20, 420, 83, 20);
 
         filter.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
         filter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NAME", "ADDRESS", "PHONE", "VEHICLE", "STATUS" }));
@@ -139,9 +163,14 @@ public class View extends javax.swing.JFrame {
                 filterActionPerformed(evt);
             }
         });
+        getContentPane().add(filter);
+        filter.setBounds(184, 28, 67, 16);
 
         jLabel7.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(240, 240, 240));
         jLabel7.setText("Search by :");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(129, 29, 51, 13);
 
         jButton5.setBackground(new java.awt.Color(255, 255, 255));
         jButton5.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
@@ -151,12 +180,16 @@ public class View extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton5);
+        jButton5.setBounds(649, 25, 63, 20);
 
         search.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 searchKeyTyped(evt);
             }
         });
+        getContentPane().add(search);
+        search.setBounds(261, 25, 382, 20);
 
         jButton6.setBackground(new java.awt.Color(255, 255, 255));
         jButton6.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
@@ -166,48 +199,17 @@ public class View extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton6);
+        jButton6.setBounds(718, 25, 57, 20);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(129, 129, 129)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filter, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 886, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(filter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addGap(33, 33, 33))
-        );
+        jButton2.setText("Change");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2);
+        jButton2.setBounds(370, 420, 110, 20);
 
         bindingGroup.bind();
 
@@ -241,6 +243,21 @@ public class View extends javax.swing.JFrame {
             //            + "\nAddress: \t\t" + jTable1.getModel().getValueAt(selectedRow, 2).toString()
             //            + "\nPhone Number: \t " + jTable1.getModel().getValueAt(selectedRow, 3).toString()+ "\n"
             //            + "Rent Duration: \t " +jTable1.getModel().getValueAt(selectedRow, 4).toString() + " days");
+            
+            
+            
+        int selectedRow = jTable1.getSelectedRow();
+         if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("ON USE")){
+             status.setSelectedIndex(0);}
+        if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("SCHEDULED")){
+            status.setSelectedIndex(1);}
+        if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("ONHOLD")){
+            status.setSelectedIndex(2);}
+        if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("NOT RETURNED")){
+            status.setSelectedIndex(3);}
+        if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("RETURNED")){
+            status.setSelectedIndex(4);}            
+            
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -399,6 +416,49 @@ public class View extends javax.swing.JFrame {
         search.setText("");
         update_Table();
     }//GEN-LAST:event_jButton6ActionPerformed
+    
+    private JDialog showMessage(String s, String title, String type){
+    
+            JOptionPane jop = new JOptionPane(s, (type.equals("S")) ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
+            JDialog dialog = jop.createDialog(title);
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+            return dialog;
+    }
+    private void statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_statusActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+              try {
+                  // TODO add your handling code here:
+                  
+                  int selectedRow = jTable1.getSelectedRow();
+                  // TODO add your handling code here:
+//                  JOptionPane.showMessageDialog(null, jTable1.getModel().getValueAt(selectedRow, 0).toString());
+                  prepared = (PreparedStatement) conn.prepareStatement("UPDATE USERNAME.DB SET STATUS = ? WHERE ID = ?");
+                  prepared.setString(1, status.getSelectedItem().toString());
+                  prepared.setInt(2, Integer.valueOf(jTable1.getModel().getValueAt(selectedRow, 0).toString()));
+
+
+                   prepared.executeUpdate();
+                   conn.close();
+            
+                  showMessage("User [ " +jTable1.getModel().getValueAt(selectedRow, 1).toString() + " ] Status Successfully Updated" ,"Success","S");
+                  update_Table();
+                  
+//                 } else{
+//                  showMessage("No Data Selected ","Selection Error","E");
+//                  }
+   
+              } catch (SQLException ex) {
+                  Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+              }
+
+
+     
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -449,12 +509,15 @@ public class View extends javax.swing.JFrame {
     private javax.persistence.Query dbQuery4;
     private javax.swing.JComboBox<String> filter;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField search;
+    private javax.swing.JComboBox<String> status;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

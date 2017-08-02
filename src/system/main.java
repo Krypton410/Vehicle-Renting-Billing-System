@@ -229,7 +229,7 @@ public class main extends javax.swing.JFrame {
         jLabel5.setBounds(730, 230, 83, 30);
 
         jButton1.setBackground(new java.awt.Color(169, 80, 21));
-        jButton1.setText("Save");
+        jButton1.setText("Rent");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -320,6 +320,7 @@ public class main extends javax.swing.JFrame {
         jLabel6.setBounds(730, 200, 83, 14);
 
         dateChooserCombo1.setCalendarPreferredSize(new java.awt.Dimension(350, 300));
+        dateChooserCombo1.setWeekStyle(datechooser.view.WeekDaysStyle.FULL);
         dateChooserCombo1.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
             public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
                 dateChooserCombo1OnSelectionChange(evt);
@@ -412,7 +413,7 @@ public class main extends javax.swing.JFrame {
                 conn.close();
                
                 receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"
-                        + "Rent Duration: \t " +String.valueOf(rent) + " days" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()+ "\nPick Up Date: \t " + date);
+                        + "Rent Duration: \t " +String.valueOf(rent) + " day / s" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()+ "\nPick Up Date: \t " + date);
                 
                
                
@@ -583,16 +584,16 @@ public class main extends javax.swing.JFrame {
             }
             
             else {
-                jButton1.setVisible(true);
+               jButton1.setVisible(true);
         receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"  
-                    + "Rent Duration: \t " +String.valueOf(rent) + " days" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()
+                    + "Rent Duration: \t " +String.valueOf(rent) + " day / s" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()
                     + "\nPick Up Date: \t " + date+ "\nTotal Bill: \t P " + bill);
             }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void theVehicleItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_theVehicleItemStateChanged
         // TODO add your handling code here:
-        
+        jButton1.setVisible(false);
                String name = theName.getText();
             String address = theAddress.getText();
             String phone = (thePhoneNumber.getText());
@@ -636,7 +637,7 @@ public class main extends javax.swing.JFrame {
             }
             
             else {
-                jButton1.setVisible(true);
+                
         receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"  
                     + "Rent Duration: \t " +String.valueOf(rent) + " days" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()
                     + "\nPick Up Date: \t " + date+ "\nTotal Bill: \t P " + bill);

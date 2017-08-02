@@ -324,7 +324,7 @@ public class Prompt extends javax.swing.JFrame {
     
     
         private JDialog showMessage(String s, String title, String type){
-    
+               
             JOptionPane jop = new JOptionPane(s, (type.equals("S")) ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
             JDialog dialog = jop.createDialog(title);
             dialog.setAlwaysOnTop(true);

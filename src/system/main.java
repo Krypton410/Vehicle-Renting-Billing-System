@@ -48,7 +48,7 @@ public class main extends javax.swing.JFrame {
     int id = 0, row, col;
      
     double bill;
-    PreparedStatement prepared, pt;
+    PreparedStatement prepared, pt, b;
     public main() throws SQLException{
         initComponents();
         setTitle("Vehicle Renting and Billing System");
@@ -71,6 +71,8 @@ public class main extends javax.swing.JFrame {
         statement = conn.createStatement();
         pt = conn.prepareStatement("ALTER TABLE USERNAME.DB ALTER COLUMN VEHICLE SET DATA TYPE varchar(50)");
         pt.executeUpdate();
+//        b = conn.prepareStatement("ALTER TABLE USERNAME.DB ALTER COLUMN BILL SET DATA TYPE integer(50)");
+//        b.executeUpdate();
         rs = statement.executeQuery("SELECT ID FROM USERNAME.DB ORDER BY ID DESC");
         jTable1.setModel(DbUtils.resultSetToTableModel(rs));
         id = jTable1.getRowCount();
@@ -89,6 +91,16 @@ public class main extends javax.swing.JFrame {
         }
         else
         theVehicle.setEnabled(true);
+        
+        
+        String query = "SELECT * FROM USERNAME.VEHICLES";
+        ResultSet v = statement.executeQuery(query);
+        while(v.next()){
+        String vehicle = v.getString("VEHICLE_NAME");
+        theVehicle.addItem(vehicle);
+        }
+        
+        
         
        
      
@@ -122,6 +134,8 @@ public class main extends javax.swing.JFrame {
         dbList2 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery2.getResultList();
         dbQuery3 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
         dbList3 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery3.getResultList();
+        dbQuery4 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList4 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery4.getResultList();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -204,7 +218,6 @@ public class main extends javax.swing.JFrame {
         getContentPane().add(jLabel4);
         jLabel4.setBounds(730, 160, 82, 14);
 
-        theVehicle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MITSUBISHI ADVENTURE 2.5 GLX", "MITSUBISHI MIRAGE GLX 1.6", "TOYOTA INNOVA 2.5 E", "TOYOTA HI-ACE COMMUTER 2.8", "TOYOTA HI-ACE GRANDIA 3.0", "TOYOTA HI-ACE SUPER GRANDIA 3.0", "TOYOTA VIOS 1.3 E", "TOYOTA AVANZA 1.5 J", "HYUNDAI ACCENT 1.6", "HYUNDAI STAREX 2.4" }));
         theVehicle.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 theVehicleItemStateChanged(evt);
@@ -285,7 +298,7 @@ public class main extends javax.swing.JFrame {
         getContentPane().add(jButton5);
         jButton5.setBounds(860, 310, 120, 23);
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList3, jTable1);
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList4, jTable1);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
         columnBinding.setColumnName("Id");
         columnBinding.setColumnClass(Long.class);
@@ -537,10 +550,11 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-                  
-                  
-                  
+        try {
+            // TODO add your handling code here:
+            
+            
+            
             String name = theName.getText();
             String address = theAddress.getText();
             String phone = (thePhoneNumber.getText());
@@ -550,98 +564,132 @@ public class main extends javax.swing.JFrame {
             int selectedRow = 0;
             
             
-        if(theVehicle.getSelectedIndex() == 0 ){
-            bill = rent * 2000;}
-        else if((theVehicle.getSelectedIndex() == 1 )){
-             bill = rent * 1500;}
-        else if((theVehicle.getSelectedIndex() == 2 )){
-             bill = rent * 2500;}
-        else if((theVehicle.getSelectedIndex() == 3 )){
-            bill = rent * 2500;}
-        else if((theVehicle.getSelectedIndex() == 4 )){
-             bill = rent * 3000;}
-        else if((theVehicle.getSelectedIndex() == 5 )){
-             bill = rent * 3500;}
-        else if((theVehicle.getSelectedIndex() == 6 )){
-             bill = rent * 1500;}
-        else if((theVehicle.getSelectedIndex() == 7 )){
-             bill = rent * 1500;}        
-        else if((theVehicle.getSelectedIndex() == 8 )){
-             bill = rent * 1500;}
-        else if((theVehicle.getSelectedIndex() == 9 )){
-             bill = rent * 2500;}
-            
-            
-            String date = dateChooserCombo1.getText();
-        
-            
-            
-            
-            if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
-           
-            showMessage("Please fill all necessary informations", "Error","E");
-            
+            int price = 0;
+            java.sql.Statement getPrice = conn.createStatement();
+       
+            String sql = "Select PRICE FROM USERNAME.VEHICLES where VEHICLE_NAME = '"+ vehicle +"'";
+            getPrice.executeQuery(sql);
+            ResultSet pr = getPrice.getResultSet();
+            while(pr.next()){
+                price = Integer.valueOf(pr.getString("PRICE"));
             }
             
-            else {
-               jButton1.setVisible(true);
-        receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"  
-                    + "Rent Duration: \t " +String.valueOf(rent) + " day / s" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()
-                    + "\nPick Up Date: \t " + date+ "\nTotal Bill: \t P " + bill);
-            }
+            
+            
+            bill = rent * price;
+            
+            
+//        if(theVehicle.getSelectedIndex() == 0 ){
+//            bill = rent * 2000;}
+//        else if((theVehicle.getSelectedIndex() == 1 )){
+//             bill = rent * 1500;}
+//        else if((theVehicle.getSelectedIndex() == 2 )){
+//             bill = rent * 2500;}
+//        else if((theVehicle.getSelectedIndex() == 3 )){
+//            bill = rent * 2500;}
+//        else if((theVehicle.getSelectedIndex() == 4 )){
+//             bill = rent * 3000;}
+//        else if((theVehicle.getSelectedIndex() == 5 )){
+//             bill = rent * 3500;}
+//        else if((theVehicle.getSelectedIndex() == 6 )){
+//             bill = rent * 1500;}
+//        else if((theVehicle.getSelectedIndex() == 7 )){
+//             bill = rent * 1500;}        
+//        else if((theVehicle.getSelectedIndex() == 8 )){
+//             bill = rent * 1500;}
+//        else if((theVehicle.getSelectedIndex() == 9 )){
+//             bill = rent * 2500;}
+
+
+String date = dateChooserCombo1.getText();
+
+
+
+
+if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
+    
+    showMessage("Please fill all necessary informations", "Error","E");
+    
+}
+
+else {
+    jButton1.setVisible(true);
+    receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"
+            + "Rent Duration: \t " +String.valueOf(rent) + " day / s" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()
+            + "\nPick Up Date: \t " + date+ "\nTotal Bill: \t P " + bill);
+}
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void theVehicleItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_theVehicleItemStateChanged
-        // TODO add your handling code here:
-        jButton1.setVisible(false);
-               String name = theName.getText();
+        try {
+            // TODO add your handling code here:
+            jButton1.setVisible(false);
+            String name = theName.getText();
             String address = theAddress.getText();
             String phone = (thePhoneNumber.getText());
             int rent = (int)rentDuration.getValue();
             String vehicle = theVehicle.getSelectedItem().toString();
             String id = theID.getText();
             int selectedRow = 0;
-            
-            
-        if(theVehicle.getSelectedIndex() == 0 ){
-            bill = rent * 2000;}
-        else if((theVehicle.getSelectedIndex() == 1 )){
-             bill = rent * 1500;}
-        else if((theVehicle.getSelectedIndex() == 2 )){
-             bill = rent * 2500;}
-        else if((theVehicle.getSelectedIndex() == 3 )){
-            bill = rent * 2500;}
-        else if((theVehicle.getSelectedIndex() == 4 )){
-             bill = rent * 3000;}
-        else if((theVehicle.getSelectedIndex() == 5 )){
-             bill = rent * 3500;}
-        else if((theVehicle.getSelectedIndex() == 6 )){
-             bill = rent * 1500;}
-        else if((theVehicle.getSelectedIndex() == 7 )){
-             bill = rent * 1500;}        
-        else if((theVehicle.getSelectedIndex() == 8 )){
-             bill = rent * 1500;}
-        else if((theVehicle.getSelectedIndex() == 9 )){
-             bill = rent * 2500;}
-            
-            
-            String date = dateChooserCombo1.getText();
-        
-            
-            
-            
-            if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
-           
-            showMessage("Please fill all necessary informations", "Error","E");
-            
+            int price = 0;
+            java.sql.Statement getPrice = conn.createStatement();
+       
+            String sql = "Select PRICE FROM USERNAME.VEHICLES where VEHICLE_NAME = '"+ vehicle +"'";
+            getPrice.executeQuery(sql);
+            ResultSet pr = getPrice.getResultSet();
+            while(pr.next()){
+            price = Integer.valueOf(pr.getString("PRICE"));
             }
             
-            else {
-                
-        receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"  
-                    + "Rent Duration: \t " +String.valueOf(rent) + " days" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()
-                    + "\nPick Up Date: \t " + date+ "\nTotal Bill: \t P " + bill);
-            }
+            
+            
+            bill = rent * price;
+            
+//        if(theVehicle.getSelectedIndex() == 0 ){
+//            bill = rent * 2000;}
+//        else if((theVehicle.getSelectedIndex() == 1 )){
+//             bill = rent * 1500;}
+//        else if((theVehicle.getSelectedIndex() == 2 )){
+//             bill = rent * 2500;}
+//        else if((theVehicle.getSelectedIndex() == 3 )){
+//            bill = rent * 2500;}
+//        else if((theVehicle.getSelectedIndex() == 4 )){
+//             bill = rent * 3000;}
+//        else if((theVehicle.getSelectedIndex() == 5 )){
+//             bill = rent * 3500;}
+//        else if((theVehicle.getSelectedIndex() == 6 )){
+//             bill = rent * 1500;}
+//        else if((theVehicle.getSelectedIndex() == 7 )){
+//             bill = rent * 1500;}        
+//        else if((theVehicle.getSelectedIndex() == 8 )){
+//             bill = rent * 1500;}
+//        else if((theVehicle.getSelectedIndex() == 9 )){
+//             bill = rent * 2500;}
+
+
+String date = dateChooserCombo1.getText();
+
+
+
+
+if(theName.getText().equals("") || theAddress.getText().equals("") || thePhoneNumber.getText().equals("")){
+    
+//    showMessage("Please fill all necessary informations", "Error","E");
+    
+}
+
+else {
+    
+    receipt.setText("ID Number : \t" + String.valueOf(id) + "\n" + "Name: \t" + name + "\nPhone Number: \t " + String.valueOf(phone) + "\n"
+            + "Rent Duration: \t " +String.valueOf(rent) + " days" + "\n" + "Vehicle : \t" + theVehicle.getSelectedItem()
+            + "\nPick Up Date: \t " + date+ "\nTotal Bill: \t P " + bill);
+}
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_theVehicleItemStateChanged
 
     private void theVehicleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_theVehicleMouseClicked
@@ -791,10 +839,12 @@ public class main extends javax.swing.JFrame {
     private java.util.List<system.Db> dbList1;
     private java.util.List<system.Db> dbList2;
     private java.util.List<system.Db> dbList3;
+    private java.util.List<system.Db> dbList4;
     private javax.persistence.Query dbQuery;
     private javax.persistence.Query dbQuery1;
     private javax.persistence.Query dbQuery2;
     private javax.persistence.Query dbQuery3;
+    private javax.persistence.Query dbQuery4;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

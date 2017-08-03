@@ -37,7 +37,7 @@ import net.proteanit.sql.DbUtils;
 public class Admin extends javax.swing.JFrame {
         Connection conn;
         java.sql.Statement statement, statementResult;
-        ResultSet rs,returnDate, pickupDate;
+        ResultSet rs,returnDate, pickupDate, vehicle;
         PreparedStatement prepared,pt;
         int selectedRow;
         DateFormat dateFormat = new SimpleDateFormat("M/d/yy");
@@ -55,6 +55,9 @@ public class Admin extends javax.swing.JFrame {
         getContentPane().setBackground(Color.decode("#22ad80"));
         jPanel1.setBackground(Color.decode("#45c199"));
         jPanel2.setBackground(Color.decode("#6ab59d"));
+        jPanel3.setBackground(Color.decode("#6ab59d"));
+        jPanel4.setBackground(Color.decode("#6ab59d"));
+        jPanel5.setBackground(Color.decode("#6bc6a9"));
         employeeBar.setBackground(Color.decode("#6bc6a9"));
         clientBar.setBackground(Color.decode("#6bc6a9"));
         clientTableBar.setBackground(Color.decode("#2d9674"));
@@ -72,6 +75,10 @@ public class Admin extends javax.swing.JFrame {
    
         
         while(rs.next());
+        
+        vehicle = statement.executeQuery("SELECT * FROM USERNAME.VEHICLES");
+        vehicleTable.setModel(DbUtils.resultSetToTableModel(vehicle));
+        while(vehicle.next());
         statementResult = conn.createStatement();
 //        String theDate = dateFormat.format(date).substring();
 //JOptionPane.showMessageDialog(null, dateFormat.format(date));
@@ -80,12 +87,16 @@ public class Admin extends javax.swing.JFrame {
         pickTable.setModel(DbUtils.resultSetToTableModel(pickupDate));
         
         
-        
-//        returnTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-
-        
            while(pickupDate.next());
+           
+           
+           
+        String query = "SELECT * FROM USERNAME.VEHICLES";
+        ResultSet v = statement.executeQuery(query);
+        while(v.next()){
+        String vehicle = v.getString("VEHICLE_NAME");
+        theVehicle.addItem(vehicle);
+        }
         
          
 //        DefaultTableModel tReturn = new DefaultTableModel();
@@ -156,6 +167,20 @@ public class Admin extends javax.swing.JFrame {
         dbList11 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery11.getResultList();
         dbQuery12 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
         dbList12 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery12.getResultList();
+        vehicles_1Query = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT v FROM Vehicles_1 v");
+        vehicles_1List = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : vehicles_1Query.getResultList();
+        dbQuery13 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList13 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery13.getResultList();
+        dbQuery14 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList14 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery14.getResultList();
+        dbQuery15 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList15 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery15.getResultList();
+        vehicles_1Query1 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT v FROM Vehicles_1 v");
+        vehicles_1List1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : vehicles_1Query1.getResultList();
+        dbQuery16 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList16 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery16.getResultList();
+        managementQuery2 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT m FROM Management m");
+        managementList2 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : managementQuery2.getResultList();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -207,6 +232,8 @@ public class Admin extends javax.swing.JFrame {
         clientReturnDate = new javax.swing.JTextArea();
         jButton3 = new javax.swing.JButton();
         employeeBar = new javax.swing.JPanel();
+        jLabel19 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
         clientBar = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         pickTable = new javax.swing.JTable();
@@ -214,11 +241,17 @@ public class Admin extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         clientTableBar = new javax.swing.JPanel();
         employeeTableBar = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        vehicleTable = new javax.swing.JTable();
+        jB = new javax.swing.JButton();
+        jLabel20 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList10, jTable1);
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList13, jTable1);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
         columnBinding.setColumnName("Id");
         columnBinding.setColumnClass(Long.class);
@@ -259,7 +292,7 @@ public class Admin extends javax.swing.JFrame {
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(390, 50, 590, 380);
 
-        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, managementList1, jTable2);
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, managementList2, jTable2);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${username}"));
         columnBinding.setColumnName("Username");
         columnBinding.setColumnClass(String.class);
@@ -280,7 +313,7 @@ public class Admin extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable2);
 
         getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(390, 490, 860, 220);
+        jScrollPane2.setBounds(390, 490, 590, 220);
 
         jButton10.setBackground(new java.awt.Color(255, 255, 255));
         jButton10.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
@@ -291,7 +324,7 @@ public class Admin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton10);
-        jButton10.setBounds(960, 460, 63, 20);
+        jButton10.setBounds(920, 460, 63, 20);
 
         jButton4.setText("Back");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -333,7 +366,7 @@ public class Admin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(search1);
-        search1.setBounds(570, 460, 382, 20);
+        search1.setBounds(570, 460, 340, 20);
 
         search.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -366,11 +399,11 @@ public class Admin extends javax.swing.JFrame {
 
         jLabel18.setText("Return Date for Clients ");
         getContentPane().add(jLabel18);
-        jLabel18.setBounds(1020, 240, 240, 20);
+        jLabel18.setBounds(1020, 270, 220, 20);
 
         jLabel17.setText("On Pick Up Date");
         getContentPane().add(jLabel17);
-        jLabel17.setBounds(1020, 40, 240, 20);
+        jLabel17.setBounds(1020, 80, 240, 20);
 
         jButton8.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton8.setText("Reset");
@@ -518,7 +551,6 @@ public class Admin extends javax.swing.JFrame {
         jLabel3.setBounds(20, 160, 80, 25);
 
         theVehicle.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        theVehicle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MITSUBISHI ADVENTURE 2.5 GLX", "MITSUBISHI MIRAGE GLX 1.6", "TOYOTA INNOVA 2.5 E", "TOYOTA HI-ACE COMMUTER 2.8", "TOYOTA HI-ACE GRANDIA 3.0", "TOYOTA HI-ACE SUPER GRANDIA 3.0", "TOYOTA VIOS 1.3 E", "TOYOTA AVANZA 1.5 J", "HYUNDAI ACCENT 1.6", "HYUNDAI STAREX 2.4" }));
         theVehicle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 theVehicleActionPerformed(evt);
@@ -584,7 +616,7 @@ public class Admin extends javax.swing.JFrame {
         jScrollPane6.setViewportView(clientReturnDate);
 
         getContentPane().add(jScrollPane6);
-        jScrollPane6.setBounds(1026, 270, 230, 150);
+        jScrollPane6.setBounds(1016, 300, 240, 120);
 
         jButton3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton3.setText("Reset");
@@ -597,10 +629,18 @@ public class Admin extends javax.swing.JFrame {
         jButton3.setBounds(110, 380, 240, 21);
         getContentPane().add(employeeBar);
         employeeBar.setBounds(20, 410, 340, 40);
+
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel19.setText("Update");
+        getContentPane().add(jLabel19);
+        jLabel19.setBounds(1020, 30, 240, 30);
+        getContentPane().add(jPanel3);
+        jPanel3.setBounds(1020, 30, 230, 30);
         getContentPane().add(clientBar);
         clientBar.setBounds(20, 20, 340, 40);
 
-        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList11, pickTable);
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList14, pickTable);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${name}"));
         columnBinding.setColumnName("Name");
         columnBinding.setColumnClass(String.class);
@@ -617,7 +657,7 @@ public class Admin extends javax.swing.JFrame {
         jScrollPane3.setViewportView(pickTable);
 
         getContentPane().add(jScrollPane3);
-        jScrollPane3.setBounds(1020, 70, 240, 150);
+        jScrollPane3.setBounds(1020, 110, 240, 150);
         getContentPane().add(jPanel1);
         jPanel1.setBounds(1010, 20, 260, 410);
         getContentPane().add(jPanel2);
@@ -625,7 +665,42 @@ public class Admin extends javax.swing.JFrame {
         getContentPane().add(clientTableBar);
         clientTableBar.setBounds(380, 10, 610, 430);
         getContentPane().add(employeeTableBar);
-        employeeTableBar.setBounds(380, 450, 880, 270);
+        employeeTableBar.setBounds(380, 450, 610, 270);
+
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, vehicles_1List1, vehicleTable);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${vehicleName}"));
+        columnBinding.setColumnName("Vehicle Name");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${plateNumber}"));
+        columnBinding.setColumnName("Plate Number");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${vehicleType}"));
+        columnBinding.setColumnName("Vehicle Type");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+        jScrollPane4.setViewportView(vehicleTable);
+
+        getContentPane().add(jScrollPane4);
+        jScrollPane4.setBounds(1020, 490, 230, 180);
+
+        jB.setText("Vehicles");
+        jB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jB);
+        jB.setBounds(1020, 680, 230, 23);
+
+        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel20.setText("Vehicles");
+        getContentPane().add(jLabel20);
+        jLabel20.setBounds(1020, 460, 230, 20);
+        getContentPane().add(jPanel5);
+        jPanel5.setBounds(1020, 460, 230, 20);
+        getContentPane().add(jPanel4);
+        jPanel4.setBounds(1010, 450, 250, 260);
 
         bindingGroup.bind();
 
@@ -659,28 +734,28 @@ public class Admin extends javax.swing.JFrame {
         dateChooserCombo1.setCurrent(aDate);
 //        dateChooserCombo1.set
 //        Integer.valueOf(jTable1.getModel().getValueAt(selectedRow, 4).toString())
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("MITSUBISHI ADVENTURE 2.5 GLX")){
-            theVehicle.setSelectedIndex(0);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("MITSUBISHI MIRAGE GLX 1.6")){
-            theVehicle.setSelectedIndex(1);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA INNOVA 2.5 E")){
-            theVehicle.setSelectedIndex(2);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE COMMUTER 2.8")){
-            theVehicle.setSelectedIndex(3);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE GRANDIA 3.0")){
-            theVehicle.setSelectedIndex(4);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE SUPER GRANDIA 3.0")){
-            theVehicle.setSelectedIndex(5);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA VIOS 1.3 E")){
-            theVehicle.setSelectedIndex(6);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA AVANZA 1.5 J")){
-            theVehicle.setSelectedIndex(7);}        
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("HYUNDAI ACCENT 1.6")){
-            theVehicle.setSelectedIndex(8);}
-        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("HYUNDAI STAREX 2.4")){
-            theVehicle.setSelectedIndex(9);}
+//        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("MITSUBISHI ADVENTURE 2.5 GLX")){
+//            theVehicle.setSelectedIndex(0);}
+//        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("MITSUBISHI MIRAGE GLX 1.6")){
+//            theVehicle.setSelectedIndex(1);}
+//        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA INNOVA 2.5 E")){
+//            theVehicle.setSelectedIndex(2);}
+//        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE COMMUTER 2.8")){
+//            theVehicle.setSelectedIndex(3);}
+//        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE GRANDIA 3.0")){
+//            theVehicle.setSelectedIndex(4);}
+//        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA HI-ACE SUPER GRANDIA 3.0")){
+//            theVehicle.setSelectedIndex(5);}
+//        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA VIOS 1.3 E")){
+//            theVehicle.setSelectedIndex(6);}
+//        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("TOYOTA AVANZA 1.5 J")){
+//            theVehicle.setSelectedIndex(7);}        
+//        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("HYUNDAI ACCENT 1.6")){
+//            theVehicle.setSelectedIndex(8);}
+//        if((jTable1.getModel().getValueAt(selectedRow, 4).toString()).equals("HYUNDAI STAREX 2.4")){
+//            theVehicle.setSelectedIndex(9);}
 
-
+            theVehicle.setSelectedItem(jTable1.getModel().getValueAt(selectedRow, 4).toString());
         
          if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("ON USE")){
              status.setSelectedIndex(0);}
@@ -828,6 +903,7 @@ public class Admin extends javax.swing.JFrame {
         thePhoneNumber.setText("");
         rentDuration.setValue(1);
          theVehicle.setSelectedIndex(0);
+         clientReturnDate.setText("");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -1082,6 +1158,17 @@ public class Admin extends javax.swing.JFrame {
 //                                        +"Return Date: \t" + output); 
         
     }//GEN-LAST:event_pickTableMouseClicked
+
+    private void jBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActionPerformed
+            try {
+                // TODO add your handling code here:
+                Vehicles v = new Vehicles();
+                v.setVisible(true);
+                this.setVisible(false);
+            } catch (SQLException ex) {
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }//GEN-LAST:event_jBActionPerformed
 
     
     
@@ -1343,6 +1430,10 @@ public class Admin extends javax.swing.JFrame {
     private java.util.List<system.Db> dbList10;
     private java.util.List<system.Db> dbList11;
     private java.util.List<system.Db> dbList12;
+    private java.util.List<system.Db> dbList13;
+    private java.util.List<system.Db> dbList14;
+    private java.util.List<system.Db> dbList15;
+    private java.util.List<system.Db> dbList16;
     private java.util.List<system.Db> dbList2;
     private java.util.List<system.Db> dbList3;
     private java.util.List<system.Db> dbList4;
@@ -1356,6 +1447,10 @@ public class Admin extends javax.swing.JFrame {
     private javax.persistence.Query dbQuery10;
     private javax.persistence.Query dbQuery11;
     private javax.persistence.Query dbQuery12;
+    private javax.persistence.Query dbQuery13;
+    private javax.persistence.Query dbQuery14;
+    private javax.persistence.Query dbQuery15;
+    private javax.persistence.Query dbQuery16;
     private javax.persistence.Query dbQuery2;
     private javax.persistence.Query dbQuery3;
     private javax.persistence.Query dbQuery4;
@@ -1369,6 +1464,7 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> filter;
     private javax.swing.JComboBox<String> filter1;
     private javax.swing.JTextField id;
+    private javax.swing.JButton jB;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
@@ -1389,7 +1485,9 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1399,16 +1497,22 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private java.util.List<system.Management> managementList;
     private java.util.List<system.Management> managementList1;
+    private java.util.List<system.Management> managementList2;
     private javax.persistence.Query managementQuery;
     private javax.persistence.Query managementQuery1;
+    private javax.persistence.Query managementQuery2;
     private javax.swing.JTable pickTable;
     private javax.swing.JSpinner rentDuration;
     private javax.swing.JTextField search;
@@ -1422,6 +1526,11 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> thePosition;
     private javax.swing.JTextField theUsername;
     private javax.swing.JComboBox<String> theVehicle;
+    private javax.swing.JTable vehicleTable;
+    private java.util.List<system.Vehicles_1> vehicles_1List;
+    private java.util.List<system.Vehicles_1> vehicles_1List1;
+    private javax.persistence.Query vehicles_1Query;
+    private javax.persistence.Query vehicles_1Query1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

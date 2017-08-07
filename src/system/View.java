@@ -15,6 +15,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
@@ -36,6 +40,8 @@ public class View extends javax.swing.JFrame {
         ResultSet rs;
         PreparedStatement prepared, pt;
         int selectedRow;
+                DateFormat dateFormat = new SimpleDateFormat("M/d/yy");
+        DateFormat dateFormat1 = new SimpleDateFormat("MM/dd/yyyy");
     public View() {
               try {
                   initComponents();
@@ -44,7 +50,15 @@ public class View extends javax.swing.JFrame {
                   setResizable(false);
                   Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                   this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-                  getContentPane().setBackground(Color.decode("#1f6850"));
+                  getContentPane().setBackground(Color.decode("#1C1B1B"));
+                          jPanel1.setBackground(Color.decode("#282525"));
+                          jPanel2.setBackground(Color.decode("#282525"));
+        jPanel3.setBackground(Color.decode("#3B3434"));
+        jScrollPane1.getViewport().setBackground(Color.decode("#221D1D"));
+        jScrollPane3.getViewport().setBackground(Color.decode("#221D1D"));
+        jScrollPane6.getViewport().setBackground(Color.decode("#221D1D"));
+        Date date = new Date();
+         jLabel17.setText("On Pick-Up : (Date Today) :" + dateFormat1.format(date));
                   String sql = "Select * from USERNAME.DB ORDER BY ID ASC";
                   conn = DriverManager.getConnection("jdbc:derby://localhost:1527/RentingSystemDB", "username", "password");
                   prepared = conn.prepareStatement(sql);
@@ -79,6 +93,8 @@ public class View extends javax.swing.JFrame {
         dbList4 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery4.getResultList();
         dbQuery5 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
         dbList5 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery5.getResultList();
+        dbQuery6 = java.beans.Beans.isDesignTime() ? null : IT301_System_PUEntityManager.createQuery("SELECT d FROM Db d");
+        dbList6 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : dbQuery6.getResultList();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
@@ -90,9 +106,22 @@ public class View extends javax.swing.JFrame {
         search = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        clientReturnDate = new javax.swing.JTextArea();
+        jLabel19 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        pickTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
+
+        jTable1.setBackground(new java.awt.Color(32, 29, 29));
+        jTable1.setForeground(new java.awt.Color(240, 240, 240));
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList5, jTable1);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
@@ -124,7 +153,6 @@ public class View extends javax.swing.JFrame {
         columnBinding.setColumnClass(Integer.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
-
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -133,8 +161,10 @@ public class View extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(10, 56, 886, 359);
+        jScrollPane1.setBounds(30, 56, 830, 170);
 
+        jButton1.setBackground(new java.awt.Color(51, 51, 51));
+        jButton1.setForeground(new java.awt.Color(240, 240, 240));
         jButton1.setText("Back");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,16 +196,17 @@ public class View extends javax.swing.JFrame {
             }
         });
         getContentPane().add(filter);
-        filter.setBounds(184, 28, 67, 16);
+        filter.setBounds(90, 30, 67, 16);
 
         jLabel7.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(240, 240, 240));
         jLabel7.setText("Search by :");
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(129, 29, 51, 13);
+        jLabel7.setBounds(110, 30, 51, 13);
 
-        jButton5.setBackground(new java.awt.Color(255, 255, 255));
+        jButton5.setBackground(new java.awt.Color(51, 51, 51));
         jButton5.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(240, 240, 240));
         jButton5.setText("Search");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -183,7 +214,7 @@ public class View extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton5);
-        jButton5.setBounds(649, 25, 63, 20);
+        jButton5.setBounds(560, 30, 63, 20);
 
         search.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -191,10 +222,11 @@ public class View extends javax.swing.JFrame {
             }
         });
         getContentPane().add(search);
-        search.setBounds(261, 25, 382, 20);
+        search.setBounds(170, 25, 382, 25);
 
-        jButton6.setBackground(new java.awt.Color(255, 255, 255));
+        jButton6.setBackground(new java.awt.Color(51, 51, 51));
         jButton6.setFont(new java.awt.Font("Tw Cen MT", 0, 11)); // NOI18N
+        jButton6.setForeground(new java.awt.Color(240, 240, 240));
         jButton6.setText("Reset");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -202,8 +234,10 @@ public class View extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton6);
-        jButton6.setBounds(718, 25, 57, 20);
+        jButton6.setBounds(630, 30, 57, 20);
 
+        jButton2.setBackground(new java.awt.Color(51, 51, 51));
+        jButton2.setForeground(new java.awt.Color(240, 240, 240));
         jButton2.setText("Change");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -213,39 +247,78 @@ public class View extends javax.swing.JFrame {
         getContentPane().add(jButton2);
         jButton2.setBounds(370, 420, 110, 20);
 
+        jLabel18.setForeground(new java.awt.Color(240, 240, 240));
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel18.setText("Return Date for Clients ");
+        getContentPane().add(jLabel18);
+        jLabel18.setBounds(540, 280, 320, 20);
+
+        jLabel17.setForeground(new java.awt.Color(240, 240, 240));
+        jLabel17.setText("On Pick Up Date");
+        getContentPane().add(jLabel17);
+        jLabel17.setBounds(40, 280, 480, 20);
+
+        clientReturnDate.setEditable(false);
+        clientReturnDate.setColumns(20);
+        clientReturnDate.setRows(5);
+        jScrollPane6.setViewportView(clientReturnDate);
+
+        getContentPane().add(jScrollPane6);
+        jScrollPane6.setBounds(540, 300, 320, 100);
+
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(240, 240, 240));
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel19.setText("Update");
+        getContentPane().add(jLabel19);
+        jLabel19.setBounds(30, 250, 830, 20);
+        getContentPane().add(jPanel3);
+        jPanel3.setBounds(30, 250, 830, 30);
+
+        pickTable.setBackground(new java.awt.Color(32, 29, 29));
+        pickTable.setForeground(new java.awt.Color(240, 240, 240));
+
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, dbList6, pickTable);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${name}"));
+        columnBinding.setColumnName("Name");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${vehicle}"));
+        columnBinding.setColumnName("Vehicle");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+        pickTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pickTableMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pickTableMouseEntered(evt);
+            }
+        });
+        jScrollPane3.setViewportView(pickTable);
+
+        getContentPane().add(jScrollPane3);
+        jScrollPane3.setBounds(40, 300, 480, 100);
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(20, 240, 850, 170);
+        getContentPane().add(jPanel2);
+        jPanel2.setBounds(20, 10, 850, 220);
+
         bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        // TODO add your handling code here:
-//        int selectedRow = jTable1.getSelectedRow();
-//        //        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-//        theID.setText(jTable1.getModel().getValueAt(selectedRow, 0).toString());
-//        theName.setText(jTable1.getModel().getValueAt(selectedRow, 1).toString());
-//        theAddress.setText(jTable1.getModel().getValueAt(selectedRow, 2).toString());
-//        thePhoneNumber.setText(jTable1.getModel().getValueAt(selectedRow, 3).toString());
-//        rentDuration.setValue(jTable1.getModel().getValueAt(selectedRow, 4));
-//
-//        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("MITSUBISHI")){
-//            theVehicle.setSelectedIndex(0);}
-//        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("TOYOTA")){
-//            theVehicle.setSelectedIndex(1);}
-//        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("FORD")){
-//            theVehicle.setSelectedIndex(2);}
-//        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("BUGATTI")){
-//            theVehicle.setSelectedIndex(3);}
-//        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("LAMBORGHINI")){
-//            theVehicle.setSelectedIndex(4);}
-//        if((jTable1.getModel().getValueAt(selectedRow, 5).toString()).equals("PORSHE")){
-//            theVehicle.setSelectedIndex(5);}
-
-        //        receipt.setText("ID Number : \t\t" + jTable1.getModel().getValueAt(selectedRow, 0).toString() + "\n" + "Name: \t\t" + jTable1.getModel().getValueAt(selectedRow, 1).toString()
-            //            + "\nAddress: \t\t" + jTable1.getModel().getValueAt(selectedRow, 2).toString()
-            //            + "\nPhone Number: \t " + jTable1.getModel().getValueAt(selectedRow, 3).toString()+ "\n"
-            //            + "Rent Duration: \t " +jTable1.getModel().getValueAt(selectedRow, 4).toString() + " days");
-            
+        selectedRow = jTable1.getSelectedRow();
+        
+        //        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+DateFormat dateFormat = new SimpleDateFormat("M/d/yy");
+        Calendar aDate = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.DATE, Integer.valueOf(jTable1.getModel().getValueAt(selectedRow, 3).toString()));
+        String output = dateFormat.format(c.getTime());    
             
             
         int selectedRow = jTable1.getSelectedRow();
@@ -258,19 +331,20 @@ public class View extends javax.swing.JFrame {
         if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("NOT RETURNED")){
             status.setSelectedIndex(3);}
         if((jTable1.getModel().getValueAt(selectedRow, 6).toString()).equals("RETURNED")){
-            status.setSelectedIndex(4);}            
+            status.setSelectedIndex(4);}      
+        
+                       clientReturnDate.setText("Name : \t" + jTable1.getModel().getValueAt(selectedRow, 1).toString() + "\n"
+                                        +"Vehicle: \t" + (jTable1.getModel().getValueAt(selectedRow, 4).toString()) + "\n"
+                                        +"Return Date: \t" + output); 
+        
             
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            // TODO add your handling code here:
-            main m = new main();
-            m.setVisible(true);
-            this.setVisible(false);
-        } catch (SQLException ex) {
-            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // TODO add your handling code here:
+        HomePage m = new HomePage();
+        m.setVisible(true);
+        this.setVisible(false);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -462,6 +536,26 @@ public class View extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void pickTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pickTableMouseClicked
+        // TODO add your handling code here:
+        //        rentDuration.setValue(jTable1.getModel().getValueAt(selectedRow, 3));
+        //
+        //        Calendar c = Calendar.getInstance();
+        //        c.setTime(new Date());
+        //        c.add(Calendar.DATE, Integer.valueOf(jTable1.getModel().getValueAt(selectedRow, 3).toString()));
+        //        String output = dateFormat.format(c.getTime());
+        //
+        //
+        //                       clientReturnDate.setText("Name : \t" + jTable1.getModel().getValueAt(selectedRow, 0).toString() + "\n"
+            //                                        +"Vehicle: \t" + theVehicle.getSelectedItem().toString() + "\n"
+            //                                        +"Return Date: \t" + output);
+
+    }//GEN-LAST:event_pickTableMouseClicked
+
+    private void pickTableMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pickTableMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pickTableMouseEntered
+
     /**
      * @param args the command line arguments
      */
@@ -499,27 +593,39 @@ public class View extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager IT301_System_PUEntityManager;
+    private javax.swing.JTextArea clientReturnDate;
     private java.util.List<system.Db> dbList;
     private java.util.List<system.Db> dbList1;
     private java.util.List<system.Db> dbList2;
     private java.util.List<system.Db> dbList3;
     private java.util.List<system.Db> dbList4;
     private java.util.List<system.Db> dbList5;
+    private java.util.List<system.Db> dbList6;
     private javax.persistence.Query dbQuery;
     private javax.persistence.Query dbQuery1;
     private javax.persistence.Query dbQuery2;
     private javax.persistence.Query dbQuery3;
     private javax.persistence.Query dbQuery4;
     private javax.persistence.Query dbQuery5;
+    private javax.persistence.Query dbQuery6;
     private javax.swing.JComboBox<String> filter;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable pickTable;
     private javax.swing.JTextField search;
     private javax.swing.JComboBox<String> status;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

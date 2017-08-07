@@ -29,7 +29,7 @@ public class MainPrompt extends javax.swing.JFrame {
     /**
      * Creates new form MainPrompt
      
-     */
+     */    
             Connection conn;
         Statement statement;
     public MainPrompt() throws SQLException {
